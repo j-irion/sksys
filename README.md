@@ -9,8 +9,12 @@ TODO:
 ## Required Tools
 
 -   `cargo`/`rust` recommended way of installation: https://rustup.rs/
--   [`yarn`](https://yarnpkg.com/)
+-   [yarn](https://yarnpkg.com/)
 -   [Terraform](https://www.terraform.io/)
+
+Development Tools:
+
+-   [Docker](https://www.docker.com/)
 
 ## Usage
 
