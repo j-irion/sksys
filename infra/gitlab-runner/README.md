@@ -1,9 +1,9 @@
 # Deploy a GitLab Runner
 
-__Requirements__:
+**Requirements**:
 
-- [Terraform](https://www.terraform.io/)
-- [Docker](https://www.docker.com/)
+-   [Terraform](https://www.terraform.io/)
+-   [Docker](https://www.docker.com/)
 
 ## Preparation
 
