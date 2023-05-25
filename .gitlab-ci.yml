@@ -15,6 +15,7 @@ check-cargo-clippy:
 
 check-prettier:
   image: node:latest
-  stage:
+  stage: lint
+  script:
     - yarn --frozen-lockfile
     - yarn prettier --check .
