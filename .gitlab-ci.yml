@@ -1,0 +1,25 @@
+variables:
+  RUST_MSRV: "1.69.0"
+
+stages:
+  - lint
+  - build
+
+check-cargo-fmt:
+  image: cimg/rust:$RUST_MSRV
+  stage: lint
+  script:
+    - cargo fmt --check --all
+
+check-cargo-clippy:
+  image: cimg/rust:$RUST_MSRV
+  stage: lint
+  script:
+    - cargo clippy
+
+check-prettier:
+  image: node:latest
+  stage: lint
+  script:
+    - yarn --frozen-lockfile
+    - yarn prettier --check .
