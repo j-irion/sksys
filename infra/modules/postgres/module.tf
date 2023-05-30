@@ -39,6 +39,12 @@ variable "mount_path" {
 	description = "Path to mount postgres data to."
 }
 
+variable "port" {
+	type = number
+	value = 5432
+	description = "Port used to access PostgresSQL container."
+}
+
 resource "docker_image" "postgres" {
 	name = "postgres:${var.image_version}"
 } 
@@ -54,6 +60,10 @@ resource "docker_container" "postgres" {
 	mounts {
 		target = "/var/lib/postgresql/data"
 		source = var.mount_path
+	}
+	ports {
+		internal = 5432
+		external = var.port
 	}
 }
 

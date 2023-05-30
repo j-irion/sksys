@@ -49,6 +49,12 @@ variable "data_mount_path" {
 	description = "Directory used to mount data."
 }
 
+variable "port" {
+	type = number
+	value = 8086
+	description = "Port used to access InfluxDB container."
+}
+
 resource "docker_image" "influxdb" {
 	name = "influxdb:${var.image_version}"
 }
@@ -69,6 +75,10 @@ resource "docker_container" "influxdb" {
 	mounts {
 		target = "/etc/influxdb2"
 		source = var.config_mount_path
+	}
+	ports {
+		internal = 8086
+		external = var.port
 	}
 }
 
