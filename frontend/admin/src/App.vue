@@ -3,7 +3,7 @@
 		<NavBar @add-client="addClient"></NavBar>
 		<div class="container" style="margin: 0; height: 100%">
 			<div class="row" style="height: 100%">
-				<div class="col-3" style="height: 100%">
+				<div class="col-3" style="height: calc(100% - 65px)">
 					<ClientList
 						:clients="clients"
 						@delete-client="deleteClient"
