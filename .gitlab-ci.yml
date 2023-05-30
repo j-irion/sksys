@@ -1,6 +1,5 @@
 variables:
   RUST_MSRV: "1.69.0"
-  TERRAFORM_MSTV: "1.4.6"
 
 stages:
   - lint
@@ -26,15 +25,17 @@ check-prettier:
     - yarn prettier --check .
 
 validate-terraform 1/2:
-  image: hashicorp/terraform:$TERRAFORM_MSTV
+  image: alpine
   stage: lint
   script:
+    - apk add terraform
     - terraform -chdir=infra/dev init
     - terraform -chdir=infra/dev validate
 
 validate-terraform 2/2:
-  image: hashicorp/terraform:$TERRAFORM_MSTV
+  image: alpine
   stage: lint
   script:
+    - apk add terraform
     - terraform -chdir=infra/gitlab-runner init
     - terraform -chdir=infra/gitlab-runner validate
