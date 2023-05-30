@@ -26,14 +26,14 @@ check-prettier:
     - yarn prettier --check .
 
 validate-terraform 1/2:
-  image: terraform:$TERRAFORM_MSTV
+  image: hashicorp/terraform:$TERRAFORM_MSTV
   stage: lint
   script:
     - terraform -chdir=infra/dev init
     - terraform -chdir=infra/dev validate
 
 validate-terraform 2/2:
-  image: terraform:$TERRAFORM_MSTV
+  image: hashicorp/terraform:$TERRAFORM_MSTV
   stage: lint
   script:
     - terraform -chdir=infra/gitlab-runner init
