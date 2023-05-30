@@ -14,7 +14,7 @@ variable "name" {
 
 variable "image_version" {
 	type = string
-	default = "2.7.1-apline"
+	default = "9.5.2"
 	description = "Label of the used postgres docker image."
 }
 
