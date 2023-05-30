@@ -51,3 +51,13 @@ module "dashboard" {
 
 	name = "dashboard"
 }
+
+output "auth_postgres_password" {
+	value = random_password.auth_db_password.result
+	sensitive = true
+}
+
+output "timeseries_influxdb_password" {
+	value = random_password.timeseries_db_password.result
+	sensitive = true
+}
