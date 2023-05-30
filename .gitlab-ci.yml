@@ -1,5 +1,6 @@
 variables:
   RUST_MSRV: "1.69.0"
+  TERRAFORM_MSTV: "1.4.6"
 
 stages:
   - lint
@@ -23,3 +24,17 @@ check-prettier:
   script:
     - yarn --frozen-lockfile
     - yarn prettier --check .
+
+validate-terraform 1/2:
+  image: terraform:$TERRAFORM_MSTV
+  stage: lint
+  script:
+    - terraform -chdir=infra/dev init
+    - terraform -chdir=infra/dev validate
+
+validate-terraform 2/2:
+  image: terraform:$TERRAFORM_MSTV
+  stage: lint
+  script:
+    - terraform -chdir=infra/gitlab-runner init
+    - terraform -chdir=infra/gitlab-runner validate
