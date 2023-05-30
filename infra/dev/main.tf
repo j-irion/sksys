@@ -41,6 +41,9 @@ module "timeseries_db" {
 
 	org = "sksys"
 	bucket = "sksys"
+
+	config_path = "./dev/influxdb/config"
+	data_path = "./dev/influxdb/data"
 }
 
 module "dashboard" {

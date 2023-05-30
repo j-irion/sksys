@@ -39,14 +39,14 @@ variable "bucket" {
 	description = "Influxdb's initial bucket. Will set DOCKER_INFLUXDB_INIT_BUCKET environment."
 }
 
-variable "config_mount_path" {
+variable "config_path" {
 	type = string
-	description = "Directory used to mount config."
+	description = "Path to config directory."
 }
 
-variable "data_mount_path" {
+variable "data_path" {
 	type = string
-	description = "Directory used to mount data."
+	description = "Path to data directory."
 }
 
 variable "port" {
@@ -69,13 +69,13 @@ resource "docker_container" "influxdb" {
 		"DOCKER_INFLUXDB_INIT_ORG=${var.org}",
 		"DOCKER_INFLUXDB_INIT_BUCKET=${var.bucket}",
 	]
-	mounts {
-		target = "/var/lib/influxdb2"
-		source = var.data_mount_path
+	volumes {
+		container_path = "/var/lib/influxdb2"
+		host_path = var.data_path
 	}
-	mounts {
-		target = "/etc/influxdb2"
-		source = var.config_mount_path
+	volumes {
+		container_path = "/etc/influxdb2"
+		host_path = var.config_path
 	}
 	ports {
 		internal = 8086
@@ -84,5 +84,5 @@ resource "docker_container" "influxdb" {
 }
 
 output "network_name" {
-	value = docker_container.influxdb.network_data.network_name
+	value = docker_container.influxdb.network_data.0.network_name
 }

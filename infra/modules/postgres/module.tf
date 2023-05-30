@@ -57,9 +57,9 @@ resource "docker_container" "postgres" {
 		"POSTGRES_USER=${var.user}",
 		"POSTGRES_PASSWORD=${var.password}"
 	]
-	mounts {
-		target = "/var/lib/postgresql/data"
-		source = var.mount_path
+	volumes {
+		container_path = "/var/lib/postgresql/data"
+		host_path = var.mount_path
 	}
 	ports {
 		internal = 5432
@@ -68,5 +68,5 @@ resource "docker_container" "postgres" {
 }
 
 output "network_name" {
-	value = docker_container.postgres.network_data.network_name
+	value = docker_container.postgres.network_data.0.network_name
 }

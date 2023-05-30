@@ -38,5 +38,5 @@ resource "docker_container" "grafana" {
 }
 
 output "network_name" {
-	value = docker_container.grafana.network_data.network_name
+	value = docker_container.grafana.network_data.0.network_name
 }
