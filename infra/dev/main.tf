@@ -29,7 +29,7 @@ module "auth_db" {
 	db = "auth"
 	user = "auth"
 	password = random_password.auth_db_password.result
-	mount_path = "./dev/auth"
+	mount_path = abspath("../../.dev/auth")
 }
 
 module "timeseries_db" {
@@ -42,8 +42,8 @@ module "timeseries_db" {
 	org = "sksys"
 	bucket = "sksys"
 
-	config_path = "./dev/influxdb/config"
-	data_path = "./dev/influxdb/data"
+	config_path = abspath("../../.dev/influxdb/config")
+	data_path = abspath("../../.dev/influxdb/data")
 }
 
 module "dashboard" {
