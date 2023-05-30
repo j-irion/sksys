@@ -14,7 +14,7 @@ variable "name" {
 
 variable "image_version" {
 	type = string
-	value = "2.7.1-apline"
+	default = "2.7.1-apline"
 	description = "Label of the used postgres docker image."
 }
 
@@ -51,7 +51,7 @@ variable "data_mount_path" {
 
 variable "port" {
 	type = number
-	value = 8086
+	default = 8086
 	description = "Port used to access InfluxDB container."
 }
 
@@ -63,6 +63,7 @@ resource "docker_container" "influxdb" {
 	name = "${var.name}-influxdb"
 	image = docker_image.influxdb.image_id
 	env = [
+		"DOCKER_INFLUXDB_INIT_MODE=setup",
 		"DOCKER_INFLUXDB_INIT_USERNAME=${var.user}",
 		"DOCKER_INFLUXDB_INIT_PASSWORD=${var.password}",
 		"DOCKER_INFLUXDB_INIT_ORG=${var.org}",
@@ -83,6 +84,5 @@ resource "docker_container" "influxdb" {
 }
 
 output "network_name" {
-	type = string
 	value = docker_container.influxdb.network_data.network_name
 }

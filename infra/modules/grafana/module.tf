@@ -14,13 +14,13 @@ variable "name" {
 
 variable "image_version" {
 	type = string
-	value = "2.7.1-apline"
+	default = "2.7.1-apline"
 	description = "Label of the used postgres docker image."
 }
 
 variable "port" {
 	type = number
-	value = 3000
+	default = 3000
 	description = "Port used to access Grafana."
 }
 
@@ -38,6 +38,5 @@ resource "docker_container" "grafana" {
 }
 
 output "network_name" {
-	type = string
 	value = docker_container.grafana.network_data.network_name
 }

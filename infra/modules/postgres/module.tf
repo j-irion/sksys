@@ -14,7 +14,7 @@ variable "name" {
 
 variable "image_version" {
 	type = string
-	value = "15.3-alpine3.18"
+	default = "15.3-alpine3.18"
 	description = "Label of the used postgres docker image."
 }
 
@@ -41,7 +41,7 @@ variable "mount_path" {
 
 variable "port" {
 	type = number
-	value = 5432
+	default = 5432
 	description = "Port used to access PostgresSQL container."
 }
 
@@ -68,6 +68,5 @@ resource "docker_container" "postgres" {
 }
 
 output "network_name" {
-	type = string
 	value = docker_container.postgres.network_data.network_name
 }
