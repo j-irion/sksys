@@ -17,7 +17,7 @@
 
 <script>
 import ClientList from "./components/ClientList.vue";
-import NavBar from "./components/Navbar.vue";
+import NavBar from "./components/NavBar.vue";
 
 export default {
 	components: {
