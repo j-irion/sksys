@@ -23,3 +23,11 @@ check-prettier:
   script:
     - yarn --frozen-lockfile
     - yarn prettier --check .
+
+build-admin-frontend:
+  image: node:latest
+  stage: build
+  script:
+    - cd ./frontend/admin
+    - npm install
+    - npm run build
