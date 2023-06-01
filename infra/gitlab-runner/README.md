@@ -1,24 +1,34 @@
 # Deploy a GitLab Runner
 
+Contains the deployment for a gitlab-runner on GCE.
+
 **Requirements**:
 
 -   [Terraform](https://www.terraform.io/)
 -   [Docker](https://www.docker.com/)
+-   [gcloud CLI](https://cloud.google.com/sdk/gcloud/)
 
 ## Preparation
 
-Run `terraform init` to initialize this deployment.
+Run the following command to initialize this deployment:
+
+```sh
+# Run in project root
+./scripts/gce-gitlab-runner.sh init
+```
 
 ## Deploy and Destroy the Runner
 
 Use the following commands to deploy or destroy the runner:
 
 ```sh
+# Run in project root
+
 # Deploy/Create GitLab Runner
-terraform apply -var-file="variables.tfvars"
+./scripts/gce-gitlab-runner.sh apply
 
 # Destroy GitLab Runner
-terraform destroy
+./scripts/gce-gitlab-runner.sh destroy
 ```
 
 ## Register Gitlab Runner
@@ -26,10 +36,8 @@ terraform destroy
 Deploying a GitLab Runner does not register it to GitLab. You can fix this by running the following command in your terminal.
 
 ```sh
-docker exec gitlab-runner gitlab-runner register --name "ci-runner-1" \
-    --registration-token "_REDACTED_" \
-    --template-config /etc/gitlab-runner/config.template.toml \
-    --non-interactive
+# Run in project root
+./scripts/gce-gitlab-runner.sh register
 ```
 
 > **Note:** You can retrieve the `registration-token` by going to `Settings > CI/CD > Runners`.
