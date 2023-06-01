@@ -33,17 +33,9 @@ module "auth_db" {
 }
 
 module "timeseries_db" {
-	source = "../modules/influxdb"
+	source = "../modules/prometheus"
 
 	name = "timeseries"
-	user = "time"
-	password = random_password.timeseries_db_password.result
-
-	org = "sksys"
-	bucket = "sksys"
-
-	config_path = abspath("../../.dev/influxdb/config")
-	data_path = abspath("../../.dev/influxdb/data")
 }
 
 module "dashboard" {

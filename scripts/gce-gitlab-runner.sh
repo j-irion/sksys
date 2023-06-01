@@ -31,7 +31,7 @@ elif [ "$1" = "apply" ]; then
 docker_ssh_host = "ssh://gitlab-runner@$GCE_INSTANCE_IP"
 ssh_priv_key = "$SSH_PRIV_KEY"
 EOF
-	sleep 5
+	sleep 10
 	terraform -chdir="$GITLAB_RUNNER_PATH" apply || exit
 elif [ "$1" = "register" ]; then
 	echo "Name of Runner:"
