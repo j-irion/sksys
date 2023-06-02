@@ -39,3 +39,9 @@ validate-terraform 2/2:
     - apk add terraform
     - terraform -chdir=infra/gitlab-runner init
     - terraform -chdir=infra/gitlab-runner validate
+
+build-aggregator:
+  image: cimg/rust:$RUST_MSRV
+  stage: build
+  script:
+    - cargo build -p aggregator
