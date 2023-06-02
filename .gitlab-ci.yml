@@ -5,6 +5,7 @@ variables:
 cache:
   paths:
     - .cache/cargo
+    - target
 
 stages:
   - lint
