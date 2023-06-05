@@ -33,6 +33,7 @@ async fn main() {
             panic!()
         }
     };
+    tracing::trace!("tracing enabled");
 
     let (registry, metric) = prometheus::setup_registry();
 

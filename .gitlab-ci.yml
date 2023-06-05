@@ -51,3 +51,9 @@ build-aggregator:
   stage: build
   script:
     - cargo build -p aggregator
+
+build-docker:
+  image: docker:24.0.2-alpine3.18
+  stage: build
+  script:
+    - docker build -t aggregator --file="backend/aggregator/Dockerfile" .

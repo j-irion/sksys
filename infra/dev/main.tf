@@ -14,11 +14,12 @@ terraform {
 provider "docker" {}
 provider "random" {}
 
-resource "random_password" "auth_db_password" {
-	length = 24
+variable "co2signal_token" {
+	description = "API token from https://www.co2signal.com/"
+	sensitive = true
 }
 
-resource "random_password" "timeseries_db_password" {
+resource "random_password" "auth_db_password" {
 	length = 24
 }
 
@@ -46,10 +47,5 @@ module "dashboard" {
 
 output "auth_postgres_password" {
 	value = random_password.auth_db_password.result
-	sensitive = true
-}
-
-output "timeseries_influxdb_password" {
-	value = random_password.timeseries_db_password.result
 	sensitive = true
 }
