@@ -56,4 +56,4 @@ build-docker:
   image: docker:24.0.2-alpine3.18
   stage: build
   script:
-    - docker build -t aggregator --file="backend/aggregator/Dockerfile" .
+    - docker build --locked -t aggregator --file="backend/aggregator/Dockerfile" .
