@@ -40,7 +40,7 @@ resource "google_compute_instance" "gitlab-runner" {
 		initialize_params {
 			image = "cos-cloud/cos-stable"
 			type = "pd-standard"
-			size = 10
+			size = 20
 		}
 	}
 
