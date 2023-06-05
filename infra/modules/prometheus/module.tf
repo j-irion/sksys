@@ -29,7 +29,7 @@ variable "port" {
 }
 
 variable "scrape_configs" {
-	type = any
+	type = list(any)
 	default = []
 	description = "Custom Prometheus scrape config"
 }
@@ -65,6 +65,8 @@ resource "docker_container" "prometheus" {
 		host_path = abspath(local_file.prometheus_config.filename)
 		read_only = true
 	}
+
+	depends_on = [ local_file.prometheus_config ]
 }
 
 output "network_name" {

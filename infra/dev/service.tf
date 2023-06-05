@@ -12,7 +12,8 @@ resource "docker_container" "aggregator" {
 	image = docker_image.aggergator.image_id
 	
 	env = [
-		"API_TOKEN=${var.co2signal_token}"
+		"API_TOKEN=${var.co2signal_token}",
+		"RUST_LOG=trace"
 	]
 
 	ports {

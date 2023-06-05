@@ -37,6 +37,19 @@ module "timeseries_db" {
 	source = "../modules/prometheus"
 
 	name = "timeseries"
+	scrape_configs = [
+		{
+			job_name = "${docker_container.aggregator.name}"
+			scrape_interval = "5s"
+			static_configs = [
+				{
+					targets = [
+						"${docker_container.aggregator.network_data.0.ip_address}:8000"
+					]
+				}
+			]
+		}
+	]
 }
 
 module "dashboard" {
