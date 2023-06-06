@@ -1,7 +1,7 @@
 <template>
-	<nav class="navbar">
-		<div class="container-fluid border-bottom pb-2">
-			<div class="navbar-brand">Admin Dashboard</div>
+	<nav class="navbar bg-dark p-3">
+		<div class="container-fluid">
+			<div class="navbar-brand text-white fw-bold">Admin Dashboard</div>
 			<form class="d-flex justify-content-center align-items-center">
 				<input
 					type="text"
@@ -25,7 +25,7 @@
 					required
 				/>
 				<button
-					class="btn btn-primary"
+					class="btn btn-light"
 					id="btn-add-client"
 					@click.prevent="addClient"
 				>
