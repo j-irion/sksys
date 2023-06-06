@@ -9,11 +9,15 @@ resource "docker_image" "aggergator" {
 
 resource "docker_container" "aggregator" {
 	name = "aggregator"
+	hostname = "aggregator"
 	image = docker_image.aggergator.image_id
+	networks_advanced {
+		name = docker_network.main.id
+	}
 	
 	env = [
 		"API_TOKEN=${var.co2signal_token}",
-		"RUST_LOG=trace"
+		"RUST_LOG=debug"
 	]
 
 	ports {

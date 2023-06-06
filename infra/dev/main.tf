@@ -23,9 +23,14 @@ resource "random_password" "auth_db_password" {
 	length = 24
 }
 
+resource "docker_network" "main" {
+	name = "app-main"
+}
+
 module "auth_db" {
 	source = "../modules/postgres"
 
+	network_id = docker_network.main.id
 	name = "auth"
 	db = "auth"
 	user = "auth"
@@ -36,6 +41,7 @@ module "auth_db" {
 module "timeseries_db" {
 	source = "../modules/prometheus"
 
+	network_id = docker_network.main.id
 	name = "timeseries"
 	scrape_configs = [
 		{
@@ -44,7 +50,7 @@ module "timeseries_db" {
 			static_configs = [
 				{
 					targets = [
-						"${docker_container.aggregator.network_data.0.ip_address}:8000"
+						"${docker_container.aggregator.hostname}:8000"
 					]
 				}
 			]
@@ -55,6 +61,7 @@ module "timeseries_db" {
 module "dashboard" {
 	source = "../modules/grafana"
 
+	network_id = docker_network.main.id
 	name = "dashboard"
 }
 

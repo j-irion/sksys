@@ -34,6 +34,11 @@ variable "scrape_configs" {
 	description = "Custom Prometheus scrape config"
 }
 
+variable "network_id" {
+	type = string
+	description = "Docker network to attach container to."
+}
+
 locals {
 	config_file = "${path.module}/prometheus.yaml"
 }
@@ -55,7 +60,11 @@ resource "docker_image" "prometheus" {
 
 resource "docker_container" "prometheus" {
 	name = "${var.name}-prometheus"
+	hostname = var.name
 	image = docker_image.prometheus.image_id
+	networks_advanced {
+		name = var.network_id
+	}
 	ports {
 		internal = 9090
 		external = var.port
