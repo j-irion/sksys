@@ -5,6 +5,7 @@
 			<ClientList
 				:clients="clients"
 				@delete-client="deleteClient"
+				@edit-client="editClient"
 			></ClientList>
 		</div>
 	</div>
@@ -94,6 +95,12 @@ export default {
 		},
 		addClient(newClient) {
 			this.clients.push(newClient);
+		},
+		editClient(editedClient) {
+			let index = this.clients.findIndex(
+				(client) => client.id === editedClient.id
+			);
+			this.clients.splice(index, 1, editedClient);
 		},
 	},
 };
