@@ -14,8 +14,8 @@
 				<td>
 					<h5>{{ client.name }}</h5>
 				</td>
-				<td><b>Location:</b> {{ client.location }}</td>
-				<td><b>Status:</b> {{ client.status }}</td>
+				<td>{{ client.location }}</td>
+				<td>{{ client.status }} kWh</td>
 				<td><button class="btn btn-primary">Edit</button></td>
 				<td>
 					<button
