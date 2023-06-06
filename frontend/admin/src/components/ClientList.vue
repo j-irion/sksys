@@ -1,21 +1,33 @@
 <template>
-	<div class="overflow-scroll" style="height: 100%">
-		<div v-for="client in clients" class="card mt-2 mb-2">
-			<div class="card-body">
-				<h5 class="card-title">{{ client.name }}</h5>
-				<div class="card-text">
-					<div><b>Location:</b> {{ client.location }}</div>
-					<div><b>Status:</b> {{ client.status }}</div>
-				</div>
-				<button
-					class="btn btn-primary"
-					@click="$emit('delete-client', client.id)"
-				>
-					Remove
-				</button>
-			</div>
-		</div>
-	</div>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th scope="col">Name</th>
+				<th scope="col">Location</th>
+				<th scope="col">Status</th>
+				<th scope="col"></th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody class="table-group-divider">
+			<tr v-for="client in clients">
+				<td>
+					<h5>{{ client.name }}</h5>
+				</td>
+				<td><b>Location:</b> {{ client.location }}</td>
+				<td><b>Status:</b> {{ client.status }}</td>
+				<td><button class="btn btn-primary">Edit</button></td>
+				<td>
+					<button
+						class="btn btn-danger ms-2"
+						@click="$emit('delete-client', client.id)"
+					>
+						Remove
+					</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </template>
 <script>
 export default {
