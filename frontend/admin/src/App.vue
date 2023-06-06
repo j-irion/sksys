@@ -1,16 +1,11 @@
 <template>
 	<div id="app">
 		<NavBar @add-client="addClient"></NavBar>
-		<div class="container" style="margin: 0; height: 100%">
-			<div class="row" style="height: 100%">
-				<div class="col-3" style="height: calc(100% - 65px)">
-					<ClientList
-						:clients="clients"
-						@delete-client="deleteClient"
-					></ClientList>
-				</div>
-				<div class="col-9"></div>
-			</div>
+		<div class="container">
+			<ClientList
+				:clients="clients"
+				@delete-client="deleteClient"
+			></ClientList>
 		</div>
 	</div>
 </template>
@@ -31,61 +26,61 @@ export default {
 					id: 1,
 					name: "Client 1",
 					location: "Germany",
-					status: "busy",
+					status: 235,
 				},
 				{
 					id: 2,
 					name: "Client 2",
 					location: "United States",
-					status: "available",
+					status: 408,
 				},
 				{
 					id: 3,
 					name: "Client 3",
 					location: "Spain",
-					status: "busy",
+					status: 83,
 				},
 				{
 					id: 4,
 					name: "Client 4",
 					location: "Canada",
-					status: "available",
+					status: 162,
 				},
 				{
 					id: 5,
 					name: "Client 5",
 					location: "United Kingdom",
-					status: "busy",
+					status: 297,
 				},
 				{
 					id: 6,
 					name: "Client 6",
 					location: "South Korea",
-					status: "available",
+					status: 443,
 				},
 				{
 					id: 7,
 					name: "Client 7",
 					location: "Saudi Arabia",
-					status: "busy",
+					status: 50,
 				},
 				{
 					id: 8,
 					name: "Client 8",
 					location: "Mexico",
-					status: "available",
+					status: 375,
 				},
 				{
 					id: 9,
 					name: "Client 9",
 					location: "Brazil",
-					status: "busy",
+					status: 119,
 				},
 				{
 					id: 10,
 					name: "Client 10",
 					location: "Russia",
-					status: "available",
+					status: 482,
 				},
 			],
 		};
