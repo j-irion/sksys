@@ -17,6 +17,7 @@ mod prometheus;
 #[derive(Deserialize, Serialize)]
 pub struct EnvConfig {
     api_token: String,
+    fetch_interval: Option<u64>,
 }
 
 #[tokio::main]
@@ -56,6 +57,7 @@ async fn main() {
 }
 
 async fn aggergate_metrics(config: EnvConfig, metric: CarbonIntensityMetric) {
+    let fetch_interval = Duration::from_secs(config.fetch_interval.unwrap_or(3600));
     let mut headers = HeaderMap::new();
     let api_key = config.api_token.parse().expect("invalid api key");
     headers.insert("auth-token", api_key);
@@ -64,7 +66,7 @@ async fn aggergate_metrics(config: EnvConfig, metric: CarbonIntensityMetric) {
         let now = Instant::now();
 
         // TODO: fetch locations
-        const LOCATIONS: &[&str] = &["DE"];
+        const LOCATIONS: &[&str] = &["DE", "DK"];
 
         for location in LOCATIONS {
             tracing::trace!(message = "fetch location data", location = location);
@@ -82,8 +84,8 @@ async fn aggergate_metrics(config: EnvConfig, metric: CarbonIntensityMetric) {
             }
         }
 
-        let next = now + Duration::from_secs(3600);
-        tracing::trace!("wait for 1h");
+        let next = now + fetch_interval;
+        tracing::trace!("wait for {} seconds", fetch_interval.as_secs());
         sleep_until(next).await;
     }
 }
