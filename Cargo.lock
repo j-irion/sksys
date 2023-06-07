@@ -507,8 +507,12 @@ name = "ingester"
 version = "0.1.0"
 dependencies = [
  "axum",
+ "envy",
+ "prometheus-client",
+ "serde",
  "tokio",
  "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
