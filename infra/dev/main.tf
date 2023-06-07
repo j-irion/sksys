@@ -22,6 +22,9 @@ variable "co2signal_token" {
 resource "random_password" "auth_db_password" {
 	length = 24
 }
+resource "random_password" "ts_db_password" {
+	length = 24
+}
 
 resource "docker_network" "main" {
 	name = "app-main"
@@ -35,27 +38,15 @@ module "auth_db" {
 	db = "auth"
 	user = "auth"
 	password = random_password.auth_db_password.result
-	mount_path = abspath("../../.dev/auth")
 }
 
 module "timeseries_db" {
-	source = "../modules/prometheus"
+	source = "../modules/influxdb"
 
 	network_id = docker_network.main.id
 	name = "timeseries"
-	scrape_configs = [
-		{
-			job_name = "${docker_container.aggregator.name}"
-			scrape_interval = "5s"
-			static_configs = [
-				{
-					targets = [
-						"${docker_container.aggregator.hostname}:8000"
-					]
-				}
-			]
-		}
-	]
+	user = "root"
+	password = random_password.ts_db_password.result
 }
 
 module "dashboard" {
@@ -67,5 +58,10 @@ module "dashboard" {
 
 output "auth_postgres_password" {
 	value = random_password.auth_db_password.result
+	sensitive = true
+}
+
+output "timeseriesdb_password" {
+	value = random_password.ts_db_password.result
 	sensitive = true
 }
