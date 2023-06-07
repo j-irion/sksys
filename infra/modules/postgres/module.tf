@@ -45,21 +45,35 @@ variable "port" {
 	description = "Port used to access PostgresSQL container."
 }
 
+variable "network_id" {
+	type = string
+	description = "Docker network to attach container to."
+}
+
 resource "docker_image" "postgres" {
 	name = "postgres:${var.image_version}"
 } 
 
+resource "docker_volume" "postgres" {
+	name = "${var.name}-postgres"
+}
+
 resource "docker_container" "postgres" {
 	name  = "${var.name}-postgres"
+	hostname = var.name
 	image = docker_image.postgres.image_id
 	env = [
 		"POSTGRES_DB=${var.db}",
 		"POSTGRES_USER=${var.user}",
 		"POSTGRES_PASSWORD=${var.password}"
 	]
+	networks_advanced {
+		name = var.network_id
+	}
 	volumes {
 		container_path = "/var/lib/postgresql/data"
-		host_path = var.mount_path
+		volume_name = docker_volume.postgres.name
+		// host_path = var.mount_path
 	}
 	ports {
 		internal = 5432

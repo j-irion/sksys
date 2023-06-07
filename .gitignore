@@ -1,6 +1,7 @@
 /node_modules
 /target
 /.dev
+/infra/modules/prometheus/prometheus.yaml
 .terraform*
 *.tfstate*
 *.tfvars
