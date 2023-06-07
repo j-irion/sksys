@@ -17,7 +17,9 @@ resource "docker_container" "aggregator" {
 	
 	env = [
 		"API_TOKEN=${var.co2signal_token}",
-		"RUST_LOG=debug"
+		"INFLUXDB_URL=http://${module.timeseries.hostname}:8086",
+		"INFLUXDB_TOKEN=${random_password.timeseries_token.result}",
+		"RUST_LOG=debug",
 	]
 
 	ports {

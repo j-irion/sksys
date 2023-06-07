@@ -22,8 +22,12 @@ variable "co2signal_token" {
 resource "random_password" "auth_db_password" {
 	length = 24
 }
-resource "random_password" "ts_db_password" {
+resource "random_password" "timeseries_password" {
 	length = 24
+}
+resource "random_password" "timeseries_token" {
+	length = 32
+	special = false
 }
 
 resource "docker_network" "main" {
@@ -40,13 +44,14 @@ module "auth_db" {
 	password = random_password.auth_db_password.result
 }
 
-module "timeseries_db" {
+module "timeseries" {
 	source = "../modules/influxdb"
 
 	network_id = docker_network.main.id
 	name = "timeseries"
 	user = "root"
-	password = random_password.ts_db_password.result
+	password = random_password.timeseries_password.result
+	token = random_password.timeseries_token.result
 }
 
 module "dashboard" {
@@ -60,8 +65,11 @@ output "auth_postgres_password" {
 	value = random_password.auth_db_password.result
 	sensitive = true
 }
-
-output "timeseriesdb_password" {
-	value = random_password.ts_db_password.result
+output "timeseries_token" {
+	value = random_password.timeseries_token.result
+	sensitive = true
+}
+output "timeseries_password" {
+	value = random_password.timeseries_password.result
 	sensitive = true
 }

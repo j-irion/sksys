@@ -18,6 +18,10 @@ variable "password" {
 	type = string
 	sensitive = true
 }
+variable "token" {
+	type = string
+	sensitive = true
+}
 variable "network_id" {
 	type = string
 }
@@ -30,8 +34,12 @@ resource "docker_image" "influxdb" {
 	name = "influxdb:2.7.1-alpine"
 }
 
+resource "docker_volume" "influxdb_config" {
+	name = "${var.name}-influxdb-config"
+}
+
 resource "docker_volume" "influxdb_data" {
-	name = "${var.name}-influxdb"
+	name = "${var.name}-influxdb-data"
 }
 
 resource "docker_container" "influxdb" {
@@ -51,10 +59,15 @@ resource "docker_container" "influxdb" {
 		"DOCKER_INFLUXDB_INIT_PASSWORD=${var.password}",
 		"DOCKER_INFLUXDB_INIT_ORG=sksys",
 		"DOCKER_INFLUXDB_INIT_BUCKET=data",
+		"DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${var.token}",
 	]
 	volumes {
-		container_path = "/var/lib/influxdb"
+		container_path = "/var/lib/influxdb2"
 		volume_name = docker_volume.influxdb_data.name
+	}
+	volumes {
+		container_path = "/etc/influxdb2"
+		volume_name = docker_volume.influxdb_config.name
 	}
 }
 
