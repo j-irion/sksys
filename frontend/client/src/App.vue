@@ -14,6 +14,7 @@
 </template>
 
 <script>
+
 export default {
 	name: "App",
 	data: () => ({
@@ -21,18 +22,19 @@ export default {
 	}),
 
 	methods: {
-		intervall() {
+		intervall(/* TODO: client token */) {
 			setInterval(async () => {
 				await this.res();
 			}, 5000);
 		},
 
-		async res() {
+		async res(/* TODO: client token */) {
 			//let apiURL = "https://fakeapi.andreaspabst.com/api/todos"
 			let apiURL = document.getElementById("apiToken").value;
 
+			// TODO: Use fetch-API with POST method
 			let response = await this.axios.get(apiURL);
-			await console.log(this.count, response);
+			console.log(this.count, response);
 			this.count++;
 		},
 	},
