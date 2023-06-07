@@ -1,4 +1,4 @@
-resource "docker_image" "aggergator" {
+resource "docker_image" "aggregator" {
 	name = "aggregator"
 
 	build {
@@ -10,7 +10,7 @@ resource "docker_image" "aggergator" {
 resource "docker_container" "aggregator" {
 	name = "aggregator"
 	hostname = "aggregator"
-	image = docker_image.aggergator.image_id
+	image = docker_image.aggregator.image_id
 	networks_advanced {
 		name = docker_network.main.id
 	}
