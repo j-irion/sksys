@@ -1,6 +1,6 @@
 {
-	"consumes": ["application/json", "text/plain"],
-	"produces": ["application/json", "text/html"],
+	"consumes": ["application/json"],
+	"produces": ["application/json"],
 	"schemes": ["http", "https"],
 	"swagger": "2.0",
 	"info": {
@@ -14,7 +14,7 @@
 	},
 	"basePath": "{{AppSubUrl | JSEscape | Safe}}/api",
 	"paths": {
-		"/device": {
+		"/admin/device": {
 			"get": {
 				"produces": ["application/json"],
 				"tags": ["admin"],
@@ -66,7 +66,7 @@
 				}
 			}
 		},
-		"/device/search": {
+		"/admin/device/search": {
 			"get": {
 				"produces": ["application/json"],
 				"tags": ["admin"],
@@ -102,7 +102,7 @@
 				}
 			}
 		},
-		"/device/{device_id}": {
+		"/admin/device/{device_id}": {
 			"get": {
 				"produces": ["application/json"],
 				"tags": ["admin"],
