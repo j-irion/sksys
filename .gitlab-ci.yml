@@ -11,6 +11,7 @@ stages:
   - format
   - lint
   - build
+  - cleanup
 
 format-cargo-fmt:
   image: cimg/rust:$RUST_MSRV
@@ -34,7 +35,8 @@ check-aggregator:
   image: cimg/rust:$RUST_MSRV
   stage: lint
   script:
-    - cargo clippy -p aggregator --locked
+    - cargo install sccache --locked
+    - env RUST_WRAPPER="$CARGO_HOME/bin/sccache" cargo clippy -p aggregator --locked
 
 check-ingester:
   rules:
@@ -45,7 +47,8 @@ check-ingester:
   image: cimg/rust:$RUST_MSRV
   stage: lint
   script:
-    - cargo clippy -p aggregator --locked
+    - cargo install sccache --locked
+    - env RUST_WRAPPER="$CARGO_HOME/bin/sccache" cargo clippy -p ingestor --locked
 
 validate-terraform 1/3:
   rules:
@@ -95,7 +98,8 @@ build-aggregator:
   image: cimg/rust:$RUST_MSRV
   stage: build
   script:
-    - cargo build -p aggregator
+    - cargo install sccache --locked
+    - env RUST_WRAPPER="$CARGO_HOME/bin/sccache" cargo build -p aggregator --locked
 
 build-ingester:
   rules:
@@ -106,4 +110,11 @@ build-ingester:
   image: cimg/rust:$RUST_MSRV
   stage: build
   script:
-    - cargo build -p ingester
+    - cargo install sccache --locked
+    - env RUST_WRAPPER="$CARGO_HOME/bin/sccache" cargo build -p ingester --locked
+
+clean:
+  image: cimg/rust:$RUST_MSRV
+  stage: cleanup
+  script:
+    - cargo clean
