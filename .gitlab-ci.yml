@@ -13,7 +13,6 @@ stages:
   - format
   - build
   - lint
-  - cleanup
 
 format-cargo-fmt:
   image: rust:$RUST_MSRV-alpine
@@ -124,9 +123,3 @@ validate-terraform 3/3:
   script:
     - terraform -chdir=infra/gitlab-runner init
     - terraform -chdir=infra/gitlab-runner validate
-
-clean:
-  image: alpine
-  stage: cleanup
-  script:
-    - cargo clean
