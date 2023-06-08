@@ -1,10 +1,12 @@
 variables:
   RUST_MSRV: "1.69.0"
   CARGO_HOME: "$CI_PROJECT_DIR/.cache/cargo"
+  SCCACHE_DIR: "$CI_PROJECT_DIR/.cache/sccache"
 
 cache:
   paths:
     - .cache/cargo
+    - .cache/sccache
     - target
 
 stages:
