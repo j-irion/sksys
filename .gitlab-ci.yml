@@ -8,29 +8,48 @@ cache:
     - target
 
 stages:
+  - format
   - lint
   - build
 
-check-cargo-fmt:
+format-cargo-fmt:
   image: cimg/rust:$RUST_MSRV
-  stage: lint
+  stage: format
   script:
     - cargo fmt --check --all
 
-check-cargo-clippy:
-  image: cimg/rust:$RUST_MSRV
-  stage: lint
-  script:
-    - cargo clippy
-
-check-prettier:
+format-prettier:
   image: node:latest
-  stage: lint
+  stage: format
   script:
     - yarn --frozen-lockfile
     - yarn prettier --check .
 
-validate-terraform 1/2:
+check-aggregator:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - backend/aggregator/**/*
+  image: cimg/rust:$RUST_MSRV
+  stage: lint
+  script:
+    - cargo clippy -p aggregator --locked
+
+check-ingester:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - backend/ingester/**/*
+  image: cimg/rust:$RUST_MSRV
+  stage: lint
+  script:
+    - cargo clippy -p aggregator --locked
+
+validate-terraform 1/3:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - infra/dev/**/*
   image: alpine
   stage: lint
   script:
@@ -38,7 +57,23 @@ validate-terraform 1/2:
     - terraform -chdir=infra/dev init
     - terraform -chdir=infra/dev validate
 
-validate-terraform 2/2:
+validate-terraform 2/3:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - infra/gitlab-runner/**/*
+  image: alpine
+  stage: lint
+  script:
+    - apk add terraform
+    - terraform -chdir=infra/gitlab-runner init
+    - terraform -chdir=infra/gitlab-runner validate
+
+validate-terraform 3/3:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - infra/gce-compute/**/*
   image: alpine
   stage: lint
   script:
@@ -47,7 +82,21 @@ validate-terraform 2/2:
     - terraform -chdir=infra/gitlab-runner validate
 
 build-aggregator:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - backend/aggregator/**/*
   image: cimg/rust:$RUST_MSRV
   stage: build
   script:
     - cargo build -p aggregator
+
+build-ingester:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - backend/ingester/**/*
+  image: cimg/rust:$RUST_MSRV
+  stage: build
+  script:
+    - cargo build -p ingester
