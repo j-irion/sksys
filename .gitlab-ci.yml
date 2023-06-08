@@ -81,7 +81,7 @@ check-ingester:
     - apk add --no-cache sccache musl-dev openssl-dev
   script:
     - rustup component add clippy
-    - cargo clippy -p ingestor --locked
+    - cargo clippy -p ingester --locked
 
 validate-terraform 1/3:
   rules:
