@@ -38,7 +38,8 @@ check-aggregator:
   image: rust:$RUST_MSRV-alpine
   stage: lint
   script:
-    - apk add sccache
+    - apk add --no-cache sccache
+    - rustup component add clippy
     - env RUST_WRAPPER="sccache" cargo clippy -p aggregator --locked
 
 check-ingester:
@@ -50,7 +51,7 @@ check-ingester:
   image: rust:$RUST_MSRV-alpine
   stage: lint
   script:
-    - apk add sccache
+    - apk add --no-cache sccache
     - env RUST_WRAPPER="sccache" cargo clippy -p ingestor --locked
 
 validate-terraform 1/3:
@@ -62,7 +63,7 @@ validate-terraform 1/3:
   image: alpine
   stage: lint
   script:
-    - apk add terraform
+    - apk add --no-cache terraform
     - terraform -chdir=infra/dev init
     - terraform -chdir=infra/dev validate
 
@@ -75,7 +76,7 @@ validate-terraform 2/3:
   image: alpine
   stage: lint
   script:
-    - apk add terraform
+    - apk add --no-cache terraform
     - terraform -chdir=infra/gitlab-runner init
     - terraform -chdir=infra/gitlab-runner validate
 
@@ -88,7 +89,7 @@ validate-terraform 3/3:
   image: alpine
   stage: lint
   script:
-    - apk add terraform
+    - apk add --no-cache terraform
     - terraform -chdir=infra/gitlab-runner init
     - terraform -chdir=infra/gitlab-runner validate
 
@@ -101,7 +102,7 @@ build-aggregator:
   image: rust:$RUST_MSRV-alpine
   stage: build
   script:
-    - apk add sccache
+    - apk add --no-cache sccache
     - env RUST_WRAPPER="$CARGO_HOME/bin/sccache" cargo build -p aggregator --locked
 
 build-ingester:
@@ -113,7 +114,7 @@ build-ingester:
   image: rust:$RUST_MSRV-alpine
   stage: build
   script:
-    - apk add sccache
+    - apk add --no-cache sccache
     - env RUST_WRAPPER="$CARGO_HOME/bin/sccache" cargo build -p ingester --locked
 
 clean:
