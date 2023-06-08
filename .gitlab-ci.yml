@@ -1,7 +1,7 @@
 variables:
   RUST_MSRV: "1.69.0"
   CARGO_HOME: "$CI_PROJECT_DIR/.cache/cargo"
-  RUST_WRAPPER: "sccache"
+  RUSTC_WRAPPER: "sccache"
   SCCACHE_DIR: "$CI_PROJECT_DIR/.cache/sccache"
 
 cache:
