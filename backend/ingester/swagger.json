@@ -70,7 +70,7 @@
 			"get": {
 				"produces": ["application/json"],
 				"tags": ["admin"],
-				"summary": "Search all emails",
+				"summary": "Search all emails (not planned yet)",
 				"operationId": "adminSearchDevices",
 				"parameters": [
 					{
