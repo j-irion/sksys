@@ -34,11 +34,6 @@ variable "password" {
 	description = "Password for postgres. Will set POSTGRES_PASSWORD environment."
 }
 
-variable "mount_path" {
-	type = string
-	description = "Path to mount postgres data to."
-}
-
 variable "port" {
 	type = number
 	default = 5432
@@ -54,7 +49,7 @@ resource "docker_image" "postgres" {
 	name = "postgres:${var.image_version}"
 } 
 
-resource "docker_volume" "postgres" {
+resource "docker_volume" "postgres_data" {
 	name = "${var.name}-postgres"
 }
 
@@ -72,7 +67,7 @@ resource "docker_container" "postgres" {
 	}
 	volumes {
 		container_path = "/var/lib/postgresql/data"
-		volume_name = docker_volume.postgres.name
+		volume_name = docker_volume.postgres_data.name
 		// host_path = var.mount_path
 	}
 	ports {
