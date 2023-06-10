@@ -4,9 +4,9 @@ Contains the deployment for a gitlab-runner on GCE.
 
 **Requirements**:
 
--   [Terraform](https://www.terraform.io/)
--   [Docker](https://www.docker.com/)
--   [gcloud CLI](https://cloud.google.com/sdk/gcloud/)
+- [Terraform](https://www.terraform.io/)
+- [Docker](https://www.docker.com/)
+- [gcloud CLI](https://cloud.google.com/sdk/gcloud/)
 
 ## Preparation
 
