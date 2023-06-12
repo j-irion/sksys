@@ -55,7 +55,7 @@
 						"in": "body",
 						"required": true,
 						"schema": {
-							"$ref": "#/definitions/CreateHookOption"
+							"$ref": "#/definitions/NewDevice"
 						}
 					}
 				],
@@ -138,6 +138,14 @@
 						"name": "device_id",
 						"in": "path",
 						"required": true
+					},
+					{
+						"name": "body",
+						"in": "body",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/NewDevice"
+						}
 					}
 				],
 				"responses": {
@@ -210,16 +218,40 @@
 			"description": "Device",
 			"type": "object",
 			"properties": {
+				"id": { "type": "integer" },
 				"name": { "type": "string" },
-				"description": { "type": "string" }
+				"description": { "type": "string" },
+				"location": { "type": "string" }
+			}
+		},
+		"NewDevice": {
+			"description": "Device",
+			"type": "object",
+			"properties": {
+				"name": { "type": "string" },
+				"description": { "type": "string" },
+				"location": { "type": "string" }
+			}
+		},
+		"NewDeviceKey": {
+			"description": "New Device Key",
+			"type": "object",
+			"properties": {
+				"key": { "type": "string" }
 			}
 		}
 	},
 	"responses": {
 		"DeviceList": {
-			"description": "DeviceList represents",
+			"description": "DeviceList represents a list of Devices",
 			"schema": {
-				"$ref": "#/definitions/Device"
+				"$ref": "#/definitions/DeviceList"
+			}
+		},
+		"NewDeviceKey": {
+			"description": "New Device Key",
+			"schema": {
+				"$ref": "#/definitions/NewDeviceKey"
 			}
 		},
 		"LocationList": {

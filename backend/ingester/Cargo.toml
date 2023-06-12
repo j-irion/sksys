@@ -7,9 +7,14 @@ edition = "2021"
 
 [dependencies]
 axum = { version = "0.6.18", features = ["tracing"] }
+chrono = "0.4.26"
 envy = "0.4.2"
+influxdb = { version = "0.6.0", features = ["derive"] }
 prometheus-client = "0.21.1"
+rand = "0.8.5"
 serde = "1"
+sqlx = { version = "0.6.3", features = ["postgres", "runtime-tokio-native-tls", "offline"] }
+thiserror = "1.0.40"
 tokio = { version = "1.28.2", features = ["full"] }
 tracing = "0.1.37"
 tracing-subscriber = "0.3.17"
