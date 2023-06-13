@@ -59,8 +59,10 @@
 								type="text"
 								class="form-control"
 								v-model="newClient.location"
+								list="locationOptions"
 								required
 							/>
+							<datalist id="locationOptions"></datalist>
 						</div>
 						<div class="mb-3">
 							<label for="clientStatus" class="form-label"
@@ -110,14 +112,45 @@ export default {
 				location: "",
 				status: 0,
 			},
+			locationData: {},
 		};
 	},
+	mounted() {
+		this.fetchLocationData();
+	},
 	methods: {
+		fetchLocationData() {
+			fetch("https://api.electricitymap.org/v3/zones")
+				.then((response) => response.json())
+				.then((data) => {
+					this.locationData = data;
+					this.populateLocationOptions();
+				})
+				.catch((error) => {
+					console.error("Error fetching location data:", error);
+				});
+		},
+		populateLocationOptions() {
+			const locationOptions = document.getElementById("locationOptions");
+			for (const locationKey in this.locationData) {
+				const location = this.locationData[locationKey];
+				const option = document.createElement("option");
+				option.value = locationKey;
+				option.text =
+					location.countryName === undefined
+						? location.zoneName
+						: `${location.countryName} - ${location.zoneName}`;
+				locationOptions.appendChild(option);
+			}
+		},
 		addClient() {
 			if (
 				this.newClient.name === "" ||
 				this.newClient.location === "" ||
-				this.newClient.status === ""
+				this.newClient.status === "" ||
+				!Object.keys(this.locationData).includes(
+					this.newClient.location
+				)
 			)
 				return;
 			console.log(this.newClient);
