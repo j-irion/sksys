@@ -10,9 +10,22 @@ cache:
     - .cache/sccache
 
 stages:
+  - .pre
   - format
   - build
   - lint
+
+update-cargo-cache:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - backend/aggregator/**/*
+        - backend/ingester/**/*
+        - .gitlab-ci.yml
+  image: rust:$RUST_MSRV-alpine
+  stage: .pre
+  script:
+    - cargo update --dry-run
 
 format-cargo-fmt:
   image: rust:$RUST_MSRV-alpine
