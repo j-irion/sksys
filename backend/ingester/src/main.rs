@@ -21,14 +21,19 @@ mod error {
 
         #[error("an error ocured with the database")]
         InfluxDbError(#[from] influxdb::Error),
+
+        #[error("user may not perform that action")]
+        Forbidden,
     }
 
     impl Error {
         fn status_code(&self) -> StatusCode {
             // TODO: Handle errors better
             match self {
+                Self::SqlxError(sqlx::Error::RowNotFound) => StatusCode::NOT_FOUND,
                 Self::SqlxError(_) => StatusCode::INTERNAL_SERVER_ERROR,
                 Self::InfluxDbError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+                Self::Forbidden => StatusCode::FORBIDDEN,
             }
         }
     }
@@ -255,7 +260,14 @@ async fn submit_data(
         authtoken
     )
     .fetch_one(&state.db_pool)
-    .await?;
+    .await
+    .map_err(|e| {
+        use crate::error::Error;
+        match e.into() {
+            Error::SqlxError(sqlx::Error::RowNotFound) => Error::Forbidden,
+            e => e,
+        }
+    })?;
 
     let pud = PowerUsageData {
         time: submission.timestamp,
