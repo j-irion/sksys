@@ -246,18 +246,17 @@ struct MachineTags {
 struct Submission {
     timestamp: DateTime<Utc>,
     used_power: f64,
+    authtoken: String,
 }
 
-// TODO: Make API better
 async fn submit_data(
     State(state): State<Arc<AppState>>,
     Json(submission): Json<Submission>,
 ) -> crate::error::Result<()> {
-    let authtoken = "".to_owned();
     let machine_info = sqlx::query_as!(
         MachineTags,
         "SELECT id as machine_id, location FROM devices WHERE authtoken = $1",
-        authtoken
+        submission.authtoken
     )
     .fetch_one(&state.db_pool)
     .await
