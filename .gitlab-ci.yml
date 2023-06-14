@@ -3,7 +3,6 @@ variables:
   CARGO_HOME: "$CI_PROJECT_DIR/.cache/cargo"
   RUSTC_WRAPPER: "sccache"
   SCCACHE_DIR: "$CI_PROJECT_DIR/.cache/sccache"
-  SCCACHE_LOG: "debug"
 
 cache:
   paths:
