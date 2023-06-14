@@ -128,6 +128,7 @@
 			},
 			"post": {
 				"produces": ["application/json"],
+				"consumes": ["application/json"],
 				"tags": ["admin"],
 				"summary": "Update Device information",
 				"operationId": "adminUpdateDevice",
