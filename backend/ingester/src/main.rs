@@ -17,10 +17,10 @@ mod error {
     #[derive(thiserror::Error, Debug)]
     pub enum Error {
         #[error("an error ocured with the database")]
-        SqlxError(#[from] sqlx::Error),
+        Sqlx(#[from] sqlx::Error),
 
         #[error("an error ocured with the database")]
-        InfluxDbError(#[from] influxdb::Error),
+        InfluxDb(#[from] influxdb::Error),
 
         #[error("user may not perform that action")]
         Forbidden,
@@ -30,9 +30,9 @@ mod error {
         fn status_code(&self) -> StatusCode {
             // TODO: Handle errors better
             match self {
-                Self::SqlxError(sqlx::Error::RowNotFound) => StatusCode::NOT_FOUND,
-                Self::SqlxError(_) => StatusCode::INTERNAL_SERVER_ERROR,
-                Self::InfluxDbError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+                Self::Sqlx(sqlx::Error::RowNotFound) => StatusCode::NOT_FOUND,
+                Self::Sqlx(_) => StatusCode::INTERNAL_SERVER_ERROR,
+                Self::InfluxDb(_) => StatusCode::INTERNAL_SERVER_ERROR,
                 Self::Forbidden => StatusCode::FORBIDDEN,
             }
         }
@@ -93,7 +93,7 @@ async fn main() {
     let influxdb_client =
         Client::new(&config.influxdb_url, "data").with_token(&config.influxdb_token);
 
-    let bind_addr = config.bind_addr.clone();
+    let bind_addr = config.bind_addr;
     let app = Router::new()
         .nest(
             "/api",
@@ -263,7 +263,7 @@ async fn submit_data(
     .map_err(|e| {
         use crate::error::Error;
         match e.into() {
-            Error::SqlxError(sqlx::Error::RowNotFound) => Error::Forbidden,
+            Error::Sqlx(sqlx::Error::RowNotFound) => Error::Forbidden,
             e => e,
         }
     })?;
