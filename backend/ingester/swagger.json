@@ -193,6 +193,22 @@
 					}
 				}
 			}
+		},
+		"/submit": {
+			"post": {
+				"consumes": ["application/json"],
+				"tags": ["ingest"],
+				"summary": "Submit Power usage data",
+				"operationId": "ingestSubmit",
+				"responses": {
+					"200": {
+						"$ref": "#/responses/empty"
+					},
+					"403": {
+						"$ref": "#/responses/forbidden"
+					}
+				}
+			}
 		}
 	},
 	"definitions": {
