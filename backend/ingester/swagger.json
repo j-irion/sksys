@@ -19,7 +19,7 @@
 				"produces": ["application/json"],
 				"tags": ["admin"],
 				"summary": "List registered devices",
-				"operationId": "adminDeviceList",
+				"operationId": "adminGetDeviceList",
 				"parameters": [
 					{
 						"type": "integer",
@@ -130,7 +130,7 @@
 				"produces": ["application/json"],
 				"tags": ["admin"],
 				"summary": "Update Device information",
-				"operationId": "adminGetDevice",
+				"operationId": "adminUpdateDevice",
 				"parameters": [
 					{
 						"type": "integer",
@@ -161,7 +161,7 @@
 				"produces": ["application/json"],
 				"tags": ["admin"],
 				"summary": "Delete device",
-				"operationId": "adminGetDevice",
+				"operationId": "adminDeleteDevice",
 				"parameters": [
 					{
 						"type": "integer",
