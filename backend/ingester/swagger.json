@@ -61,7 +61,7 @@
 				],
 				"responses": {
 					"201": {
-						"$ref": "#/responses/Hook"
+						"$ref": "#/responses/NewDeviceKey"
 					}
 				}
 			}
