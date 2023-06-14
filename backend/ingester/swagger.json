@@ -4,7 +4,7 @@
 	"schemes": ["http", "https"],
 	"swagger": "2.0",
 	"info": {
-		"description": "This documentation describes the Gitea API.",
+		"description": "This documentation describes the Ingester API.",
 		"title": "Ingester API.",
 		"license": {
 			"name": "MIT",
