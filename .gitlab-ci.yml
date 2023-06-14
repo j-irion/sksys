@@ -20,6 +20,7 @@ format-cargo-fmt:
   script:
     - rustup component add rustfmt
     - cargo fmt --check --all
+  cache: []
 
 format-prettier:
   image: node:latest
@@ -27,6 +28,7 @@ format-prettier:
   script:
     - yarn --frozen-lockfile
     - yarn prettier --check .
+  cache: []
 
 build-aggregator:
   rules:
@@ -99,6 +101,7 @@ validate-terraform 1/3:
   script:
     - terraform -chdir=infra/dev init
     - terraform -chdir=infra/dev validate
+  cache: []
 
 validate-terraform 2/3:
   rules:
@@ -113,6 +116,7 @@ validate-terraform 2/3:
   script:
     - terraform -chdir=infra/gitlab-runner init
     - terraform -chdir=infra/gitlab-runner validate
+  cache: []
 
 validate-terraform 3/3:
   rules:
@@ -127,3 +131,4 @@ validate-terraform 3/3:
   script:
     - terraform -chdir=infra/gce-compute init
     - terraform -chdir=infra/gce-compute validate
+  cache: []
