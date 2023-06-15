@@ -42,7 +42,6 @@ build-aggregator:
     - apk add --no-cache sccache musl-dev openssl-dev
   script:
     - cargo build -p aggregator --locked
-  after_script:
     - sccache --show-stats
     - du -hs .cache/ target/
 
@@ -58,7 +57,6 @@ build-ingester:
     - apk add --no-cache sccache musl-dev openssl-dev
   script:
     - cargo build -p ingester --locked
-  after_script:
     - sccache --show-stats
     - du -hs .cache/ target/
 
@@ -75,7 +73,6 @@ check-aggregator:
   script:
     - rustup component add clippy
     - cargo clippy -p aggregator --locked
-  after_script:
     - sccache --show-stats
     - du -hs .cache/ target/
 
@@ -92,7 +89,6 @@ check-ingester:
   script:
     - rustup component add clippy
     - cargo clippy -p ingester --locked
-  after_script:
     - sccache --show-stats
     - du -hs .cache/ target/
 
