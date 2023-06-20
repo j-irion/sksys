@@ -18,7 +18,7 @@ variable "image_version" {
 }
 variable "port" {
 	type = number
-	default = 3000
+	default = 3001
 	description = "Port used to access Grafana."
 }
 variable "network_id" {
@@ -38,9 +38,14 @@ resource "docker_container" "grafana" {
 		name = var.network_id
 	}
 	ports {
-		internal = 3000
+		internal = 3001
 		external = var.port
 	}
+	env= [
+		"GF_AUTH_ANONYMOUS_ORG_ROLE=Admin",
+    		"GF_AUTH_ANONYMOUS_ENABLED=true",
+		"GF_SERVER_HTTP_PORT=3001",
+	]
 }
 
 output "network_name" {
