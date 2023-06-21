@@ -31,7 +31,8 @@ async fn main() {
     let config: EnvConfig = match envy::from_env() {
         Ok(config) => config,
         Err(envy::Error::MissingValue(name)) => {
-            panic!("missing environment variable {}", name.to_uppercase())
+            tracing::error!("missing environment variable {}", name.to_uppercase());
+            panic!()
         }
         Err(envy::Error::Custom(err)) => {
             tracing::error!("{err}");
