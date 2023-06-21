@@ -1,0 +1,163 @@
+{
+  "db": "PostgreSQL",
+  "03e0e1606773fcefcf325ed73225f637eb29599a4555170aa2475153e7f8043a": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Int4"
+        ]
+      }
+    },
+    "query": "DELETE FROM devices WHERE id = $1"
+  },
+  "04ee7e42b857b7b72fa9d05ea1fdf3587522c86cf50c36ceb453376e14d4476c": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int4"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "description",
+          "ordinal": 2,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "location",
+          "ordinal": 3,
+          "type_info": "Varchar"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "SELECT id, name, description, location FROM devices"
+  },
+  "34515d277502c1387220e5f36bdb8fcd8c1556c69ee4351b22e3e892b707451e": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Varchar",
+          "Varchar",
+          "Varchar",
+          "Bpchar"
+        ]
+      }
+    },
+    "query": "INSERT INTO devices (name, description, location, authtoken) VALUES ($1, $2, $3, $4)"
+  },
+  "523f23b20e0ee7d991111fde509838022735770dfa8d73c32daf165a6b022614": {
+    "describe": {
+      "columns": [
+        {
+          "name": "location",
+          "ordinal": 0,
+          "type_info": "Varchar"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "SELECT DISTINCT location FROM devices"
+  },
+  "84337ae2aa707073aca3dac06206ea71c451c72db66b429f8024d0f54fb9733e": {
+    "describe": {
+      "columns": [
+        {
+          "name": "machine_id",
+          "ordinal": 0,
+          "type_info": "Int4"
+        },
+        {
+          "name": "location",
+          "ordinal": 1,
+          "type_info": "Varchar"
+        }
+      ],
+      "nullable": [
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Bpchar"
+        ]
+      }
+    },
+    "query": "SELECT id as machine_id, location FROM devices WHERE authtoken = $1"
+  },
+  "88a81a8634387478b0813866372506f9c20e8cfe2c63f93cfaf7b79647fcebef": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int4"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "description",
+          "ordinal": 2,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "location",
+          "ordinal": 3,
+          "type_info": "Varchar"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Int4"
+        ]
+      }
+    },
+    "query": "SELECT id, name, description, location FROM devices WHERE id = $1"
+  },
+  "f9c7cb331a0228e89b5aefd90c097c00852823c53ecf372abbee5c7854db1deb": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Varchar",
+          "Varchar",
+          "Varchar",
+          "Int4"
+        ]
+      }
+    },
+    "query": "UPDATE devices SET name = $1, description = $2, location = $3 WHERE id = $4"
+  }
+}
