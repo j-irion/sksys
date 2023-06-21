@@ -201,6 +201,16 @@
 				"tags": ["ingest"],
 				"summary": "Submit Power usage data",
 				"operationId": "ingestSubmit",
+				"parameters": [
+					{
+						"name": "body",
+						"in": "body",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Submission"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"$ref": "#/responses/empty"
@@ -255,6 +265,15 @@
 			"type": "object",
 			"properties": {
 				"key": { "type": "string" }
+			}
+		},
+		"Submission": {
+			"description": "New Device Key",
+			"type": "object",
+			"properties": {
+				"timestamp": { "type": "integer" },
+				"used_power": { "type": "number" },
+				"authtoken": { "type": "string" }
 			}
 		}
 	},
