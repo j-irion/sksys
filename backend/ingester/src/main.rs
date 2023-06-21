@@ -242,8 +242,25 @@ struct MachineTags {
     location: String,
 }
 
+mod unix_date_format {
+    use chrono::{DateTime, NaiveDateTime, Utc};
+    use serde::{self, Deserialize, Deserializer};
+
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<DateTime<Utc>, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s = i64::deserialize(deserializer)?;
+        Ok(DateTime::<Utc>::from_utc(
+            NaiveDateTime::from_timestamp_opt(s, 0).unwrap(),
+            Utc,
+        ))
+    }
+}
+
 #[derive(Deserialize, Debug)]
 struct Submission {
+    #[serde(with = "unix_date_format")]
     timestamp: DateTime<Utc>,
     used_power: f64,
     authtoken: String,
