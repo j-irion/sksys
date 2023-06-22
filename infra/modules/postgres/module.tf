@@ -76,6 +76,6 @@ resource "docker_container" "postgres" {
 	}
 }
 
-output "network_name" {
-	value = docker_container.postgres.network_data.0.network_name
+output "hostname" {
+	value = docker_container.postgres.hostname
 }

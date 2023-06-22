@@ -20,7 +20,8 @@ variable "co2signal_token" {
 }
 
 resource "random_password" "auth_db_password" {
-	length = 24
+	length = 32
+	special = false
 }
 resource "random_password" "timeseries_password" {
 	length = 24
