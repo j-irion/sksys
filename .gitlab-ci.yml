@@ -8,6 +8,7 @@ cache:
   paths:
     - .cache/cargo
     - .cache/sccache
+    - node_modules/
 
 stages:
   - .pre
@@ -72,6 +73,20 @@ build-ingester:
     - cargo build -p ingester --locked
     - sccache --show-stats
     - du -hs .cache/ target/
+
+build-client-frontend:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - frontend/client/**/*
+        - .gitlab-ci.yml
+  image: node:latest
+  stage: build
+  script:
+    - cd ./frontend/client
+    - npm install
+    - npm run build
+    - du -hs node_modules/
 
 check-aggregator:
   rules:
