@@ -7,6 +7,6 @@ import "bootstrap/dist/css/bootstrap.css";
 
 const app = createApp(App);
 
-app.use( fetch);
+app.use(fetch);
 
 app.mount("#app");
