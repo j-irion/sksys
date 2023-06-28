@@ -1,4 +1,5 @@
 [workspace]
 members = [
-	"backend/aggregator"
+	"backend/aggregator",
+	"backend/ingester"
 ]

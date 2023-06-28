@@ -1,0 +1,433 @@
+{
+	"consumes": ["application/json"],
+	"produces": ["application/json"],
+	"schemes": ["http", "https"],
+	"swagger": "2.0",
+	"info": {
+		"description": "This documentation describes the Ingester API.",
+		"title": "Ingester API.",
+		"license": {
+			"name": "MIT",
+			"url": "http://opensource.org/licenses/MIT"
+		},
+		"version": "0.0.1"
+	},
+	"basePath": "{{AppSubUrl | JSEscape | Safe}}/api",
+	"paths": {
+		"/admin/device": {
+			"get": {
+				"produces": ["application/json"],
+				"tags": ["admin"],
+				"summary": "List registered devices",
+				"operationId": "adminGetDeviceList",
+				"parameters": [
+					{
+						"type": "integer",
+						"description": "page number of results to return (1-based)",
+						"name": "page",
+						"in": "query"
+					},
+					{
+						"type": "integer",
+						"description": "page size of results",
+						"name": "limit",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"$ref": "#/responses/CronList"
+					},
+					"403": {
+						"$ref": "#/responses/forbidden"
+					}
+				}
+			},
+			"post": {
+				"consumes": ["application/json"],
+				"produces": ["application/json"],
+				"tags": ["admin"],
+				"summary": "Register a device",
+				"operationId": "adminCreateDevice",
+				"parameters": [
+					{
+						"name": "body",
+						"in": "body",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/NewDevice"
+						}
+					}
+				],
+				"responses": {
+					"201": {
+						"$ref": "#/responses/NewDeviceKey"
+					}
+				}
+			}
+		},
+		"/admin/device/search": {
+			"get": {
+				"produces": ["application/json"],
+				"tags": ["admin"],
+				"summary": "Search all emails (not planned yet)",
+				"operationId": "adminSearchDevices",
+				"parameters": [
+					{
+						"type": "string",
+						"description": "keyword",
+						"name": "q",
+						"in": "query"
+					},
+					{
+						"type": "integer",
+						"description": "page number of results to return (1-based)",
+						"name": "page",
+						"in": "query"
+					},
+					{
+						"type": "integer",
+						"description": "page size of results",
+						"name": "limit",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"$ref": "#/responses/DeviceList"
+					},
+					"403": {
+						"$ref": "#/responses/forbidden"
+					}
+				}
+			}
+		},
+		"/admin/device/{device_id}": {
+			"get": {
+				"produces": ["application/json"],
+				"tags": ["admin"],
+				"summary": "Get device information",
+				"operationId": "adminGetDevice",
+				"parameters": [
+					{
+						"type": "integer",
+						"description": "device_id of device",
+						"name": "device_id",
+						"in": "path",
+						"required": true
+					}
+				],
+				"responses": {
+					"204": {
+						"$ref": "#/responses/empty"
+					},
+					"404": {
+						"$ref": "#/responses/notFound"
+					}
+				}
+			},
+			"post": {
+				"produces": ["application/json"],
+				"consumes": ["application/json"],
+				"tags": ["admin"],
+				"summary": "Update Device information",
+				"operationId": "adminUpdateDevice",
+				"parameters": [
+					{
+						"type": "integer",
+						"description": "device_id of device",
+						"name": "device_id",
+						"in": "path",
+						"required": true
+					},
+					{
+						"name": "body",
+						"in": "body",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/NewDevice"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"$ref": "#/responses/empty"
+					},
+					"404": {
+						"$ref": "#/responses/notFound"
+					}
+				}
+			},
+			"delete": {
+				"produces": ["application/json"],
+				"tags": ["admin"],
+				"summary": "Delete device",
+				"operationId": "adminDeleteDevice",
+				"parameters": [
+					{
+						"type": "integer",
+						"description": "device_id of device",
+						"name": "device_id",
+						"in": "path",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"$ref": "#/responses/empty"
+					},
+					"404": {
+						"$ref": "#/responses/notFound"
+					}
+				}
+			}
+		},
+		"/locations": {
+			"get": {
+				"produces": ["application/json"],
+				"tags": ["aggregator"],
+				"summary": "Get used locations",
+				"operationId": "aggregatorGetLocations",
+				"responses": {
+					"200": {
+						"$ref": "#/responses/LocationList"
+					}
+				}
+			}
+		},
+		"/submit": {
+			"post": {
+				"consumes": ["application/json"],
+				"tags": ["ingest"],
+				"summary": "Submit Power usage data",
+				"operationId": "ingestSubmit",
+				"parameters": [
+					{
+						"name": "body",
+						"in": "body",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Submission"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"$ref": "#/responses/empty"
+					},
+					"403": {
+						"$ref": "#/responses/forbidden"
+					}
+				}
+			}
+		}
+	},
+	"definitions": {
+		"LocationList": {
+			"description": "LocationList",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/Location"
+			}
+		},
+		"Location": {
+			"description": "Location",
+			"type": "string"
+		},
+		"DeviceList": {
+			"description": "DeviceList",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/Device"
+			}
+		},
+		"Device": {
+			"description": "Device",
+			"type": "object",
+			"properties": {
+				"id": { "type": "integer" },
+				"name": { "type": "string" },
+				"description": { "type": "string" },
+				"location": { "type": "string" }
+			}
+		},
+		"NewDevice": {
+			"description": "Device",
+			"type": "object",
+			"properties": {
+				"name": { "type": "string" },
+				"description": { "type": "string" },
+				"location": { "type": "string" }
+			}
+		},
+		"NewDeviceKey": {
+			"description": "New Device Key",
+			"type": "object",
+			"properties": {
+				"key": { "type": "string" }
+			}
+		},
+		"Submission": {
+			"description": "New Device Key",
+			"type": "object",
+			"properties": {
+				"timestamp": { "type": "integer" },
+				"used_power": { "type": "number" },
+				"authtoken": { "type": "string" }
+			}
+		}
+	},
+	"responses": {
+		"DeviceList": {
+			"description": "DeviceList represents a list of Devices",
+			"schema": {
+				"$ref": "#/definitions/DeviceList"
+			}
+		},
+		"NewDeviceKey": {
+			"description": "New Device Key",
+			"schema": {
+				"$ref": "#/definitions/NewDeviceKey"
+			}
+		},
+		"LocationList": {
+			"description": "LocationList represents a list of locations",
+			"schema": {
+				"$ref": "#/definitions/LocationList"
+			}
+		},
+		"conflict": {
+			"description": "APIConflict is a conflict empty response"
+		},
+		"empty": {
+			"description": "APIEmpty is an empty response"
+		},
+		"error": {
+			"description": "APIError is error format response",
+			"headers": {
+				"message": {
+					"type": "string"
+				},
+				"url": {
+					"type": "string"
+				}
+			}
+		},
+		"forbidden": {
+			"description": "APIForbiddenError is a forbidden error response",
+			"headers": {
+				"message": {
+					"type": "string"
+				},
+				"url": {
+					"type": "string"
+				}
+			}
+		},
+		"invalidTopicsError": {
+			"description": "APIInvalidTopicsError is error format response to invalid topics",
+			"headers": {
+				"invalidTopics": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"message": {
+					"type": "string"
+				}
+			}
+		},
+		"notFound": {
+			"description": "APINotFound is a not found empty response"
+		},
+		"parameterBodies": {
+			"description": "parameterBodies",
+			"schema": {
+				"$ref": "#/definitions/CreatePushMirrorOption"
+			}
+		},
+		"redirect": {
+			"description": "APIRedirect is a redirect response"
+		},
+		"string": {
+			"description": "APIString is a string response",
+			"schema": {
+				"type": "string"
+			}
+		},
+		"validationError": {
+			"description": "APIValidationError is error format response related to input validation",
+			"headers": {
+				"message": {
+					"type": "string"
+				},
+				"url": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"securityDefinitions": {
+		"AccessToken": {
+			"type": "apiKey",
+			"name": "access_token",
+			"in": "query"
+		},
+		"AuthorizationHeaderToken": {
+			"description": "API tokens must be prepended with \"token\" followed by a space.",
+			"type": "apiKey",
+			"name": "Authorization",
+			"in": "header"
+		},
+		"BasicAuth": {
+			"type": "basic"
+		},
+		"SudoHeader": {
+			"description": "Sudo API request as the user provided as the key. Admin privileges are required.",
+			"type": "apiKey",
+			"name": "Sudo",
+			"in": "header"
+		},
+		"SudoParam": {
+			"description": "Sudo API request as the user provided as the key. Admin privileges are required.",
+			"type": "apiKey",
+			"name": "sudo",
+			"in": "query"
+		},
+		"TOTPHeader": {
+			"description": "Must be used in combination with BasicAuth if two-factor authentication is enabled.",
+			"type": "apiKey",
+			"name": "X-GITEA-OTP",
+			"in": "header"
+		},
+		"Token": {
+			"type": "apiKey",
+			"name": "token",
+			"in": "query"
+		}
+	},
+	"security": [
+		{
+			"BasicAuth": []
+		},
+		{
+			"Token": []
+		},
+		{
+			"AccessToken": []
+		},
+		{
+			"AuthorizationHeaderToken": []
+		},
+		{
+			"SudoParam": []
+		},
+		{
+			"SudoHeader": []
+		},
+		{
+			"TOTPHeader": []
+		}
+	]
+}
