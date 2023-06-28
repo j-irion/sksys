@@ -1,9 +1,7 @@
 const HOST = "http://localhost:8000";
-const OPTS = { mode: "no-cors" };
 
 export async function getAllClients() {
-	const response = await fetch(`${HOST}/api/admin/devices`, OPTS);
-	console.info(await response.text());
+	const response = await fetch(`${HOST}/api/admin/devices`);
 	return response.json();
 }
 

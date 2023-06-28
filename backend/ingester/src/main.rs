@@ -10,6 +10,7 @@ use influxdb::{Client, InfluxDbWriteable};
 use rand::{distributions::Alphanumeric, Rng};
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
+use tower_http::{cors::CorsLayer, trace::TraceLayer};
 
 mod error {
     use axum::{http::StatusCode, response::IntoResponse};
@@ -110,7 +111,9 @@ async fn main() {
             config,
             influxdb_client,
             db_pool,
-        }));
+        }))
+        .layer(TraceLayer::new_for_http())
+        .layer(CorsLayer::very_permissive());
 
     axum::Server::bind(&bind_addr)
         .serve(app.into_make_service())
