@@ -25,6 +25,10 @@ variable "network_id" {
 	type = string
 	description = "Docker network to attach container to."
 }
+variable "dashboard_file" {
+	type = string
+	description = "Path to Grafan Dashboard configuration."
+}
 
 resource "docker_image" "grafana" {
 	name = "grafana/grafana:${var.image_version}"
@@ -43,10 +47,15 @@ resource "docker_container" "grafana" {
 	}
 	env= [
 		"GF_AUTH_ANONYMOUS_ORG_ROLE=Admin",
-    		"GF_AUTH_ANONYMOUS_ENABLED=true",
+		"GF_AUTH_ANONYMOUS_ENABLED=true",
 		"GF_SERVER_HTTP_PORT=3001",
 		"GF_SECURITY_ALLOW_EMBEDDING=true"
 	]
+	volumes {
+		host_path = var.dashboard_file
+		container_path = "/etc/grafana/provisioning/dashboards/default.json"
+		read_only = true
+	}
 }
 
 output "network_name" {

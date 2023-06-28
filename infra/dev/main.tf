@@ -59,6 +59,7 @@ module "dashboard" {
 
 	network_id = docker_network.main.id
 	name = "dashboard"
+	dashboard_file = abspath("../../frontend/Dashboard/Dashboards.json")
 }
 
 output "auth_postgres_password" {
