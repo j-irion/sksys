@@ -13,7 +13,7 @@
 		</div>
 
 		<div class="input-group mb-3">
-			<label for="metric">Stromeinheit:</label>
+			<label class="input-group-text" for="metric">Stromeinheit:</label>
 
 			<input
 				type="number"
@@ -24,53 +24,46 @@
 				max="1000000"
 			/>
 		</div>
-
-		<button btn-primary btn-lg @click="intervall">weiter</button>
 	</div>
 </template>
 
 <script>
-/*
 export default {
 	name: "App",
-	data: () => ({
-		count: 1,
-	}),
-	
-
+	created() {
+		setInterval(async () => {
+			await this.res();
+		}, 1000);
+	},
 	methods: {
-		intervall( TODO: client token ) {
-			setInterval(async () => {
-				await this.res();
-			}, 5000);
-		},
-
-		async res( TODO: client token ) {
-			let apiURL = document.getElementById("apiToken").value;
-
-			const url = ;
-
-			let data = {
-  			
+		async res() {
+			const apiToken = document.getElementById("apiToken").value;
+			if (apiToken === "") {
+				return;
 			}
-
-			var request = new Request(url, {
-			method: 'POST',
-			body: data,
-			headers: new Headers()
+			const power = parseFloat(document.getElementById("metric").value);
+			console.log(power);
+			if (!isFinite(power)) {
+				return;
+			}
+			let data = {
+				timestamp: Math.floor(Date.now() / 1000),
+				used_power: power,
+				authtoken: apiToken,
+			};
+			const response = await fetch("http://localhost:8000/api/submit", {
+				// TODO: remove http://localhost:8000
+				method: "POST",
+				body: JSON.stringify(data),
+				headers: {
+					"Content-Type": "application/json",
+				},
 			});
-
-			fetch(request)
-			.then(function() {
-    // Handle response we get from the API
-})
-
-			console.log(this.count, response);
-			this.count++;
+			// Check status codea
+			console.log(await response.text());
 		},
 	},
 };
-*/
 </script>
 
 <style>
