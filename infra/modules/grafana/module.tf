@@ -45,6 +45,7 @@ resource "docker_container" "grafana" {
 		"GF_AUTH_ANONYMOUS_ORG_ROLE=Admin",
     		"GF_AUTH_ANONYMOUS_ENABLED=true",
 		"GF_SERVER_HTTP_PORT=3001",
+		"GF_SECURITY_ALLOW_EMBEDDING=true"
 	]
 }
 
