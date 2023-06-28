@@ -2,11 +2,11 @@ const HOST = "http://localhost:8000";
 
 export async function getAllClients() {
 	const response = await fetch(`${HOST}/api/admin/devices`);
-	return response.json();
+	return await response.json();
 }
 
 export async function createClient(client) {
-	const response = await fetch("/admin/device", {
+	const response = await fetch(`${HOST}/api/admin/devices`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify(client),
@@ -15,19 +15,15 @@ export async function createClient(client) {
 }
 
 export async function editClient(client) {
-	const response = await fetch(`/admin/device/${client.id}`, {
-		method: "PUT",
+	await fetch(`${HOST}/api/admin/devices/${client.id}`, {
+		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify(client),
 	});
-	return await response.json();
 }
 
-export async function deleteClient(client) {
-	const response = await fetch(`/admin/device/${client.id}`, {
+export async function deleteClient(id) {
+	await fetch(`${HOST}/api/admin/devices/${id}`, {
 		method: "DELETE",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(client),
 	});
-	return await response.json();
 }

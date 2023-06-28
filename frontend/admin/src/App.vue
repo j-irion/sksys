@@ -4,8 +4,8 @@
 		<div class="container">
 			<ClientList
 				:clients="clients"
-				@delete-client="deleteClient"
-				@edit-client="editClient"
+				@delete-client="removeClient"
+				@edit-client="changeClient"
 			></ClientList>
 		</div>
 	</div>
@@ -14,7 +14,12 @@
 <script>
 import ClientList from "./components/ClientList.vue";
 import NavBar from "./components/NavBar.vue";
-import { getAllClients, createClient } from "./services/ClientService";
+import {
+	getAllClients,
+	createClient,
+	deleteClient,
+	editClient,
+} from "./services/ClientService";
 
 export default {
 	components: {
@@ -30,24 +35,21 @@ export default {
 		this.fetchAllClients();
 	},
 	methods: {
-		deleteClient(id) {
-			const index = this.clients.findIndex((obj) => obj.id === id);
-			if (index !== -1) {
-				this.clients.splice(index, 1);
-			}
+		async removeClient(id) {
+			await deleteClient(id);
+			this.fetchAllClients();
 		},
-		addClient(newClient) {
-			this.clients.push(newClient);
+		async addClient(newClient) {
+			const response = await createClient(newClient);
+			this.fetchAllClients();
 		},
-		editClient(editedClient) {
-			let index = this.clients.findIndex(
-				(client) => client.id === editedClient.id
-			);
-			this.clients.splice(index, 1, editedClient);
+		async changeClient(editedClient) {
+			await editClient(editedClient);
+			this.fetchAllClients();
 		},
-		fetchAllClients() {
-			let test = getAllClients();
-			console.log(test);
+		async fetchAllClients() {
+			const fetchedClients = await getAllClients();
+			this.clients = fetchedClients;
 		},
 	},
 };

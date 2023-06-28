@@ -4,7 +4,7 @@
 			<tr>
 				<th scope="col">Name</th>
 				<th scope="col">Location</th>
-				<th scope="col">Status</th>
+				<th scope="col">Description</th>
 				<th scope="col"></th>
 				<th scope="col"></th>
 			</tr>
@@ -15,7 +15,7 @@
 					<h5>{{ client.name }}</h5>
 				</td>
 				<td>{{ client.location }}</td>
-				<td>{{ client.status }} kWh</td>
+				<td>{{ client.description }}</td>
 				<td>
 					<button
 						class="btn btn-primary"
@@ -89,17 +89,15 @@
 						</div>
 						<div class="mb-3">
 							<label for="clientStatus" class="form-label"
-								>Status</label
+								>Description</label
 							>
 							<div class="input-group">
-								<input
+								<textarea
 									id="clientStatus"
-									type="number"
 									class="form-control"
-									v-model="clientBeingEdited.status"
+									v-model="clientBeingEdited.description"
 									required
-								/>
-								<span class="input-group-text">kWh</span>
+								></textarea>
 							</div>
 						</div>
 					</form>
@@ -128,6 +126,7 @@
 </template>
 <script>
 export default {
+	emits: ["edit-client", "delete-client"],
 	props: {
 		clients: {
 			type: Array,
@@ -139,8 +138,8 @@ export default {
 			clientBeingEdited: {
 				id: 0,
 				name: "",
+				description: "",
 				location: "",
-				status: 234,
 			},
 		};
 	},
@@ -149,15 +148,15 @@ export default {
 			this.clientBeingEdited = {
 				id: null,
 				name: "",
+				description: "",
 				location: "",
-				status: 0,
 			};
 		},
 		editClient() {
 			if (
 				this.clientBeingEdited.name === "" ||
 				this.clientBeingEdited.location === "" ||
-				this.clientBeingEdited.status === ""
+				this.clientBeingEdited.description === ""
 			)
 				return;
 			console.log(this.clientBeingEdited);

@@ -65,18 +65,15 @@
 							<datalist id="locationOptions"></datalist>
 						</div>
 						<div class="mb-3">
-							<label for="clientStatus" class="form-label"
-								>Status</label
+							<label for="clientDescription" class="form-label"
+								>Description</label
 							>
 							<div class="input-group">
-								<input
-									id="clientStatus"
-									type="number"
+								<textarea
+									id="clientDescription"
 									class="form-control"
-									v-model="newClient.status"
-									required
-								/>
-								<span class="input-group-text">kWh</span>
+									v-model="newClient.description"
+								></textarea>
 							</div>
 						</div>
 					</form>
@@ -105,12 +102,13 @@
 </template>
 <script>
 export default {
+	emits: ["add-client"],
 	data() {
 		return {
 			newClient: {
 				name: "",
+				description: "",
 				location: "",
-				status: 0,
 			},
 			locationData: {},
 		};
@@ -147,25 +145,24 @@ export default {
 			if (
 				this.newClient.name === "" ||
 				this.newClient.location === "" ||
-				this.newClient.status === "" ||
+				this.newClient.description === "" ||
 				!Object.keys(this.locationData).includes(
 					this.newClient.location
 				)
 			)
 				return;
-			console.log(this.newClient);
 			this.$emit("add-client", this.newClient);
 			this.newClient = {
 				name: "",
+				description: "",
 				location: "",
-				status: 0,
 			};
 		},
 		clearModal() {
 			this.newClient = {
 				name: "",
+				description: "",
 				location: "",
-				status: 0,
 			};
 		},
 	},
