@@ -14,11 +14,6 @@ terraform {
 provider "docker" {}
 provider "random" {}
 
-variable "co2signal_token" {
-	description = "API token from https://www.co2signal.com/"
-	sensitive = true
-}
-
 resource "random_password" "auth_db_password" {
 	length = 32
 	special = false
@@ -60,17 +55,4 @@ module "dashboard" {
 
 	network_id = docker_network.main.id
 	name = "dashboard"
-}
-
-output "auth_postgres_password" {
-	value = random_password.auth_db_password.result
-	sensitive = true
-}
-output "timeseries_token" {
-	value = random_password.timeseries_token.result
-	sensitive = true
-}
-output "timeseries_password" {
-	value = random_password.timeseries_password.result
-	sensitive = true
 }
