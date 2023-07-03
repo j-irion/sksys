@@ -4,6 +4,10 @@ terraform {
 			source = "kreuzwerker/docker"
 			version = "3.0.2"
 		}
+		grafana = {
+			source = "grafana/grafana"
+			version = "1.42.0"
+		}
 	}
 }
 
@@ -56,6 +60,16 @@ resource "docker_container" "grafana" {
 		container_path = "/etc/grafana/provisioning/dashboards/default.json"
 		read_only = true
 	}
+}
+
+provider "grafana" {
+	url = "http://localhost:${var.port}"
+	auth = "anonymous"
+}
+
+resource "grafana_dashboard" "metrics" {
+	config_json = file("../../frontend/Dashboard/Dashboards.json")
+	depends_on = [ docker_container.grafana ]
 }
 
 output "network_name" {
