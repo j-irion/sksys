@@ -56,4 +56,18 @@ module "dashboard" {
 	network_id = docker_network.main.id
 	name = "dashboard"
 	dashboard_file = abspath("../../frontend/Dashboard/Dashboards.json")
+	
+	datasource = {
+		name = "InfluxDB"
+		type = "influxdb"
+		url = "http://${module.timeseries.hostname}:8086"
+		uid = "d61a11c3-4997-441b-b4b5-c756e3c58f6a"
+		jsonData = {
+			version = "Flux"
+			organization = "sksys"
+			defaultBucket = "data"
+			tlsSkipVerify = true
+		}
+		secureJsonDataToken = "yaTDKIjLugM0pRbjcdQO4JbW2FVJ5p8J"
+	}
 }

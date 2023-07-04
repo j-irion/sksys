@@ -33,6 +33,16 @@ variable "dashboard_file" {
 	type = string
 	description = "Path to Grafan Dashboard configuration."
 }
+variable "datasource" {
+	type = object({
+		name: string
+		type: string
+		url: string
+		jsonData: any
+		secureJsonDataToken: string
+		uid: string
+	})
+}
 
 resource "docker_image" "grafana" {
 	name = "grafana/grafana:${var.image_version}"
@@ -69,6 +79,19 @@ provider "grafana" {
 
 resource "grafana_dashboard" "metrics" {
 	config_json = file("../../frontend/Dashboard/Dashboards.json")
+	depends_on = [ docker_container.grafana ]
+}
+
+resource "grafana_data_source" "metrics" {
+	name = var.datasource.name
+	type = var.datasource.type
+	access_mode = "proxy"
+	uid = var.datasource.uid
+	url = var.datasource.url
+	json_data_encoded = jsonencode(var.datasource.jsonData)
+	secure_json_data_encoded = jsonencode({
+		token = var.datasource.secureJsonDataToken
+	})
 	depends_on = [ docker_container.grafana ]
 }
 
