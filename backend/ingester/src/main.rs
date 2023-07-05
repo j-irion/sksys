@@ -10,7 +10,10 @@ use influxdb::{Client, InfluxDbWriteable};
 use rand::{distributions::Alphanumeric, Rng};
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
-use tower_http::{cors::CorsLayer, trace::TraceLayer};
+use tower_http::{
+    services::{ServeDir, ServeFile},
+    trace::TraceLayer,
+};
 
 mod error {
     use axum::{http::StatusCode, response::IntoResponse};
@@ -19,17 +22,14 @@ mod error {
     pub enum Error {
         #[error("an error ocured with the database")]
         Sqlx(#[from] sqlx::Error),
-
         #[error("an error ocured with the database")]
         InfluxDb(#[from] influxdb::Error),
-
         #[error("user may not perform that action")]
         Forbidden,
     }
 
     impl Error {
         fn status_code(&self) -> StatusCode {
-            // TODO: Handle errors better
             match self {
                 Self::Sqlx(sqlx::Error::RowNotFound) => StatusCode::NOT_FOUND,
                 Self::Sqlx(_) => StatusCode::INTERNAL_SERVER_ERROR,
@@ -59,6 +59,7 @@ struct EnvConfig {
     influxdb_query: String,
     influxdb_token: String,
     database_url: String,
+    serve_dir: std::path::PathBuf,
     bind_addr: SocketAddr,
 }
 
@@ -107,13 +108,17 @@ async fn main() {
                 .route("/locations", get(get_locations))
                 .route("/submit", post(submit_data)),
         )
+        .nest_service(
+            "/",
+            ServeDir::new(&config.serve_dir)
+                .fallback(ServeFile::new(config.serve_dir.join("index.html"))),
+        )
         .with_state(Arc::new(AppState {
             config,
             influxdb_client,
             db_pool,
         }))
-        .layer(TraceLayer::new_for_http())
-        .layer(CorsLayer::very_permissive());
+        .layer(TraceLayer::new_for_http());
 
     axum::Server::bind(&bind_addr)
         .serve(app.into_make_service())
