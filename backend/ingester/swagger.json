@@ -14,7 +14,7 @@
 	},
 	"basePath": "{{AppSubUrl | JSEscape | Safe}}/api",
 	"paths": {
-		"/admin/device": {
+		"/admin/devices": {
 			"get": {
 				"produces": ["application/json"],
 				"tags": ["admin"],
