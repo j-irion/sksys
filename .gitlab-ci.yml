@@ -61,6 +61,15 @@ build-client-frontend:
     - npm run build
     - du -hs node_modules/
 
+build-admin-frontend:
+  image: node:latest
+  stage: build
+  script:
+    - cd ./frontend/admin
+    - npm install
+    - npm run build
+    - du -hs node_modules/
+
 check-aggregator:
   image: rust:$RUST_MSRV-alpine
   stage: lint

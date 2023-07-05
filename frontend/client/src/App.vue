@@ -1,7 +1,10 @@
 <template>
 	<div class="container">
 		<div class="input-group mb-3">
-			<span class="input-group-text" id="inputGroup-sizing-default"
+			<span
+				style="font-size: 19px"
+				class="input-group-text"
+				id="inputGroup-sizing-default"
 				>API Token</span
 			>
 			<input
@@ -13,7 +16,9 @@
 		</div>
 
 		<div class="input-group mb-3">
-			<label for="metric">Stromeinheit:</label>
+			<label style="font-size: 15px" class="input-group-text" for="metric"
+				>Stromeinheit:</label
+			>
 
 			<input
 				type="number"
@@ -24,53 +29,67 @@
 				max="1000000"
 			/>
 		</div>
-
-		<button btn-primary btn-lg @click="intervall">weiter</button>
+		<div>
+			<p>Sekunden bis zum nächsten Post: {{ timerCount }}</p>
+		</div>
 	</div>
 </template>
 
 <script>
-/*
 export default {
 	name: "App",
-	data: () => ({
-		count: 1,
-	}),
-	
+	data() {
+		return {
+			timerCount: 5,
+		};
+	},
+
+	watch: {
+		timerCount: {
+			handler(value) {
+				if (value > -1) {
+					setTimeout(() => {
+						this.timerCount--;
+					}, 1000);
+				}
+				if (value == -1) {
+					this.timerCount = 5;
+					this.res();
+				}
+			},
+			immediate: true,
+		},
+	},
 
 	methods: {
-		intervall( TODO: client token ) {
-			setInterval(async () => {
-				await this.res();
-			}, 5000);
-		},
-
-		async res( TODO: client token ) {
-			let apiURL = document.getElementById("apiToken").value;
-
-			const url = ;
-
-			let data = {
-  			
+		async res() {
+			const apiToken = document.getElementById("apiToken").value;
+			if (apiToken === "") {
+				return;
 			}
-
-			var request = new Request(url, {
-			method: 'POST',
-			body: data,
-			headers: new Headers()
+			const power = parseFloat(document.getElementById("metric").value);
+			console.log(power);
+			if (!isFinite(power)) {
+				return;
+			}
+			let data = {
+				timestamp: Math.floor(Date.now() / 1000),
+				used_power: power,
+				authtoken: apiToken,
+			};
+			const response = await fetch("http://localhost:8000/api/submit", {
+				// TODO: remove http://localhost:8000
+				method: "POST",
+				body: JSON.stringify(data),
+				headers: {
+					"Content-Type": "application/json",
+				},
 			});
-
-			fetch(request)
-			.then(function() {
-    // Handle response we get from the API
-})
-
-			console.log(this.count, response);
-			this.count++;
+			// Check status codea
+			console.log(await response.text());
 		},
 	},
 };
-*/
 </script>
 
 <style>
