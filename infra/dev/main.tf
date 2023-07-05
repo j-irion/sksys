@@ -68,6 +68,6 @@ module "dashboard" {
 			defaultBucket = "data"
 			tlsSkipVerify = true
 		}
-		secureJsonDataToken = "yaTDKIjLugM0pRbjcdQO4JbW2FVJ5p8J"
+		secureJsonDataToken = random_password.timeseries_token.result
 	}
 }
