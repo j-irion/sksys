@@ -3,6 +3,7 @@ target/
 /backend/ingester/sqlx-data.json
 dist
 infra/modules/prometheus/prometheus.yaml
+/frontend/Dashboard/Dashboards.json
 *.tfstate*
 .terraform
 .cache
