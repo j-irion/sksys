@@ -1,6 +1,7 @@
 node_modules/
 target/
 /backend/ingester/sqlx-data.json
+dist
 infra/modules/prometheus/prometheus.yaml
 *.tfstate*
 .terraform
