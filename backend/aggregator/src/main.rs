@@ -14,6 +14,7 @@ pub struct EnvConfig {
     influxdb_url: String,
     influxdb_token: String,
     fetch_interval: Option<u64>,
+    ingester_url: String,
 }
 
 #[derive(InfluxDbWriteable)]
@@ -58,12 +59,25 @@ async fn main() {
         let now = Instant::now();
 
         // TODO: fetch locations
-        const LOCATIONS: &[&str] = &["DE", "DK"];
+        let locations: Vec<String> =
+            match reqwest::get(format!("{}/api/locations", config.ingester_url)).await {
+                Ok(response) => match response.json().await {
+                    Ok(result) => result,
+                    Err(err) => {
+                        tracing::error!("{err}");
+                        Vec::new()
+                    }
+                },
+                Err(err) => {
+                    tracing::error!("request error: {err}");
+                    Vec::new()
+                }
+            };
 
         let mut data = Vec::new();
-        for location in LOCATIONS {
+        for location in locations {
             tracing::trace!(message = "fetch location data", location = location);
-            let carbon_intensity = match carbon::fetch_intensity(&co2_client, *location).await {
+            let carbon_intensity = match carbon::fetch_intensity(&co2_client, &location).await {
                 Ok(Some(result)) => result,
                 Ok(None) => continue,
                 Err(err) => {
