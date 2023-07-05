@@ -46,6 +46,7 @@ resource "docker_container" "ingester" {
 		"DATABASE_URL=postgres://auth:${random_password.auth_db_password.result}@${module.auth_db.hostname}/auth",
 		"BIND_ADDR=0.0.0.0:8000",
 		"RUST_LOG=debug",
+		"SERVE_DIR=/dist",
 	]
 
 	ports {

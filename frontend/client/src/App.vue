@@ -77,7 +77,7 @@ export default {
 				used_power: power,
 				authtoken: apiToken,
 			};
-			const response = await fetch("http://localhost:8000/api/submit", {
+			const response = await fetch("/api/submit", {
 				// TODO: remove http://localhost:8000
 				method: "POST",
 				body: JSON.stringify(data),

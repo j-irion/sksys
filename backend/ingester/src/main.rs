@@ -95,6 +95,8 @@ async fn main() {
     let influxdb_client =
         Client::new(&config.influxdb_url, "data").with_token(&config.influxdb_token);
 
+    let client_dir = config.serve_dir.join("client");
+
     let bind_addr = config.bind_addr;
     let app = Router::new()
         .nest(
@@ -107,6 +109,10 @@ async fn main() {
                 )
                 .route("/locations", get(get_locations))
                 .route("/submit", post(submit_data)),
+        )
+        .nest_service(
+            "/client",
+            ServeDir::new(&client_dir).fallback(ServeFile::new(client_dir.join("index.html"))),
         )
         .nest_service(
             "/",
