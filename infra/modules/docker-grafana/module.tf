@@ -29,6 +29,9 @@ resource "docker_container" "main" {
 		container_path = "/var/lib/grafana"
 		volume_name = docker_volume.data.name
 	}
+	networks_advanced {
+		name = var.network_id
+	}
 }
 
 resource "docker_volume" "data" {

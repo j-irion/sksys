@@ -5,6 +5,8 @@ module "postgres" {
 	db_name = "postgres"
 	db_user = "root"
 	db_passwd = random_password.postgres.result
+
+	network_id = docker_network.default.id
 }
 
 module "influxdb" {
@@ -15,12 +17,16 @@ module "influxdb" {
 	passwd = random_password.influxdb_passwd.result
 	token = random_password.influxdb_token.result
 	bucket = "data"
+
+	network_id = docker_network.default.id
 }
 
 module "grafana" {
 	source = "../../modules/docker-grafana"
 
 	name = "grafana"
+
+	network_id = docker_network.default.id
 }
 
 module "grafana-config" {
@@ -43,6 +49,10 @@ module "aggregator" {
 	co2_token = ""
 	influxdb_url = module.influxdb.url
 	influxdb_token = random_password.influxdb_token.result
+
+	network_id = docker_network.default.id
+	
+	depends_on = [ module.ingester ]
 }
 
 module "ingester" {
@@ -53,4 +63,6 @@ module "ingester" {
 	influxdb_token = random_password.influxdb_token.result
 	postgres_url = module.postgres.url
 	port = 80
+
+	network_id = docker_network.default.id
 }

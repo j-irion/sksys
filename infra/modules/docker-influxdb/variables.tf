@@ -30,3 +30,8 @@ variable "port" {
 	default = 8086
 	description = "Port used by this database"
 }
+
+variable "network_id" {
+	type = string
+	default = "default"
+}

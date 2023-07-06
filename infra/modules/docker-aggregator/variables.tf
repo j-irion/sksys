@@ -19,3 +19,8 @@ variable "influxdb_token" {
 	description = "Token used to insert InfluxDB data"
 	sensitive = true
 }
+
+variable "network_id" {
+	type = string
+	default = "default"
+}

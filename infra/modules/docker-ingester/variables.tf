@@ -23,3 +23,8 @@ variable "port" {
 	type = number
 	description = "Port to open database"
 }
+
+variable "network_id" {
+	type = string
+	default = "default"
+}

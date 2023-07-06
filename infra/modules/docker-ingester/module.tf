@@ -28,4 +28,13 @@ resource "docker_container" "main" {
 		"SERVE_DIR=/dist",
 		"RUST_LOG=debug"
 	]
+
+	networks_advanced {
+		name = var.network_id
+	}
+
+	ports {
+		internal = var.port
+		external = var.port
+	}
 }

@@ -28,6 +28,9 @@ resource "docker_container" "main" {
 		internal = 5432
 		external = var.port
 	}
+	networks_advanced {
+		name = var.network_id
+	}
 }
 
 resource "docker_volume" "pgdata" {

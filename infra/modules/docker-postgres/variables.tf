@@ -24,3 +24,8 @@ variable "port" {
 	default = 5432
 	description = "Port used by this database. Defaults to 5432"
 }
+
+variable "network_id" {
+	type = string
+	default = "default"
+}

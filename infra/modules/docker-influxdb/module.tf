@@ -35,6 +35,9 @@ resource "docker_container" "main" {
 		internal = 8086
 		external = var.port
 	}
+	networks_advanced {
+		name = var.network_id
+	}
 }
 
 resource "docker_volume" "data" {

@@ -5,7 +5,7 @@ module "instance" {
 	machine_type = "e2-micro"
 	zone = "europe-west3-a"
 
-	boot_disk_size = 10
+	boot_disk_size = 20
 
 	ports = [ 80, 3000 ]
 }

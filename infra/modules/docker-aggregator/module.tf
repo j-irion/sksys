@@ -27,4 +27,8 @@ resource "docker_container" "main" {
 		"INFLUXDB_TOKEN=${var.influxdb_token}",
 		"RUST_LOG=debug"
 	]
+
+	networks_advanced {
+		name = var.network_id
+	}
 }
