@@ -12,7 +12,7 @@ resource "google_compute_instance" "main" {
 	machine_type = var.machine_type
 	zone = var.zone
 
-	tags = ["docker"]
+	tags = ["docker", "allow-tcp-8000", "allow-tcp-3000"]
 
 	boot_disk {
 		initialize_params {

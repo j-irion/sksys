@@ -6,4 +6,6 @@ module "instance" {
 	zone = "europe-west3-a"
 
 	boot_disk_size = 10
+
+	ports = [ 22, 8000, 3000 ]
 }

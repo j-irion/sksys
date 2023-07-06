@@ -8,8 +8,14 @@ terraform {
 			source = "hashicorp/random"
 			version = "3.5.1"
 		}
+		grafana = {
+			source = "grafana/grafana"
+			version = "2.0.0"
+		}
 	}
 }
+
+provider "random" {}
 
 provider "docker" {
 	host = "ssh://sksys@${var.gce_instance_host}"
@@ -18,6 +24,11 @@ provider "docker" {
 		"-o", "UserKnownHostsFile=/dev/null",
 		"-o", "StrictHostKeyChecking=no"
 	]
+}
+
+provider "grafana" {
+	url = "http://${var.gce_instance_host}:3000"
+	auth = "anonymous"
 }
 
 resource "random_password" "postgres" {

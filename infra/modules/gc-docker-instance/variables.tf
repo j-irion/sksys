@@ -17,3 +17,9 @@ variable "boot_disk_size" {
 	type = number
 	description = "Number of GiB used for boot disk"
 }
+
+variable "ports" {
+	type = list(number)
+	description = "Ports to open"
+	default = []
+}
