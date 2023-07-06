@@ -6,9 +6,24 @@ COPY . /project
 WORKDIR /project
 RUN env CARGO_HOME=/project/.cache/cargo cargo build --release -p ingester
 
+FROM node AS admin-builder
+
+COPY ./frontend/admin /project 
+WORKDIR /project
+RUN npm install
+RUN npm run build
+
+FROM node AS client-builder
+
+COPY ./frontend/client /project 
+WORKDIR /project
+RUN npm install
+RUN npm run build
+
 FROM debian:bullseye
 
-COPY ./dist /dist
+COPY --from=admin-build /project/dist /dist
+COPY --from=client-build /project/dist /dist/client
 COPY --from=builder /project/target/release/ingester /usr/local/bin
 RUN apt-get update && apt-get install -y ca-certificates openssl
 
