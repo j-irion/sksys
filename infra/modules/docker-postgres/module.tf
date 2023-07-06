@@ -24,6 +24,10 @@ resource "docker_container" "main" {
 		container_path = "/var/lib/postgresql/data"
 		volume_name = docker_volume.pgdata.name
 	}
+	ports {
+		internal = 5432
+		external = var.port
+	}
 }
 
 resource "docker_volume" "pgdata" {
