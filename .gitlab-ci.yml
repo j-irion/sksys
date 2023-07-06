@@ -108,8 +108,8 @@ validate-terraform 2/3:
   before_script:
     - apk add --no-cache terraform
   script:
-    - terraform -chdir=infra/gitlab-runner init
-    - terraform -chdir=infra/gitlab-runner validate
+    - terraform -chdir=infra/prod/gce init
+    - terraform -chdir=infra/prod/gce validate
   cache: []
 
 validate-terraform 3/3:
@@ -118,6 +118,6 @@ validate-terraform 3/3:
   before_script:
     - apk add --no-cache terraform
   script:
-    - terraform -chdir=infra/gce-compute init
-    - terraform -chdir=infra/gce-compute validate
+    - terraform -chdir=infra/prod/docker init
+    - terraform -chdir=infra/prod/docker validate
   cache: []
