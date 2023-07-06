@@ -1,5 +1,5 @@
 output "ip_addr" {
-	value = module.instance.ip_addr
+	value = var.gce_instance_host
 }
 
 output "postgres_password" {
