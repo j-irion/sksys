@@ -1,3 +1,3 @@
-output "host" {
-	value = docker_container.main.hostname
+output "url" {
+	value = "http://${docker_container.main.hostname}:${var.port}"
 }

@@ -10,10 +10,11 @@ terraform {
 resource "docker_image" "aggregator" {
 	name = "aggregator"
 	build {
-		dockerfile = abspath("../../../backend/aggregator/Dockerfile")
-		context = abspath("../../..")
+		dockerfile = "${path.module}/../../../backend/aggregator/Dockerfile"
+		context = "${path.module}/../../.."
 	}
 }
+
 
 resource "docker_container" "main" {
 	image = docker_image.aggregator.image_id

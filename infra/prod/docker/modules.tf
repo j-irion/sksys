@@ -26,7 +26,7 @@ module "grafana" {
 module "grafana-config" {
 	source = "../../modules/grafana-config"
 
-	influxdb_url = "http://${module.influxdb.host}:8086"
+	influxdb_url = "${module.influxdb.url}"
 	influxdb_bucket = "data"
 	influxdb_token = random_password.influxdb_token.result
 
@@ -34,4 +34,23 @@ module "grafana-config" {
 		module.grafana,
 		module.influxdb
 	]
+}
+
+module "aggregator" {
+	source = "../../modules/docker-aggregator"
+
+	name = "aggregator"
+	co2_token = ""
+	influxdb_url = module.influxdb.url
+	influxdb_token = random_password.influxdb_token.result
+}
+
+module "ingester" {
+	source = "../../modules/docker-ingester"
+
+	name = "ingester"
+	influxdb_url = module.influxdb.url
+	influxdb_token = random_password.influxdb_token.result
+	postgres_url = module.postgres.url
+	port = 80
 }

@@ -12,3 +12,14 @@ variable "influxdb_token" {
 	type = string
 	description = "Token used to insert InfluxDB data"
 }
+
+variable "postgres_url" {
+	type = string
+	description = "Postgres URL contains login info"
+	sensitive = true
+}
+
+variable "port" {
+	type = number
+	description = "Port to open database"
+}

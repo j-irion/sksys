@@ -8,10 +8,10 @@ terraform {
 }
 
 resource "docker_image" "ingester" {
-	name = "ingestor"
+	name = var.name
 	build {
-		dockerfile = abspath("../../../backend/ingester/Dockerfile")
-		context = abspath("../../..")
+		dockerfile = "${path.module}/../../../backend/ingester/Dockerfile"
+		context = "${path.module}/../../.."
 	}
 }
 
