@@ -24,3 +24,13 @@ resource "random_password" "postgres" {
 	length = 32
 	special = false
 }
+
+resource "random_password" "influxdb_passwd" {
+	length = 32
+	special = false
+}
+
+resource "random_password" "influxdb_token" {
+	length = 32
+	special = false
+}
