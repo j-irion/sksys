@@ -7,5 +7,5 @@ module "instance" {
 
 	boot_disk_size = 10
 
-	ports = [ 22, 8000, 3000 ]
+	ports = [ 3000, 8000 ]
 }

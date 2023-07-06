@@ -23,7 +23,27 @@ resource "google_compute_instance" "main" {
 	}
 
 	network_interface {
-		network = "default"
+		network = google_compute_network.default.name
 		access_config {}
 	}
+}
+
+resource "google_compute_firewall"  "default" {
+	name = "${var.name}-firewall"
+	network = google_compute_network.default.name
+
+	source_ranges = ["0.0.0.0/0"]
+
+	allow {
+		protocol = "tcp"
+		ports = ["22"]
+	}
+	allow {
+		protocol = "tcp"
+		ports = var.ports
+	}
+}
+
+resource "google_compute_network" "default" {
+	name = "${var.name}-network"
 }
