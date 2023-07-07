@@ -15,6 +15,7 @@ stages:
   - format
   - build
   - lint
+  - deploy
 
 format-cargo-fmt:
   image: rust:$RUST_MSRV-alpine
@@ -121,3 +122,15 @@ validate-terraform 3/3:
     - terraform -chdir=infra/prod/docker init
     - terraform -chdir=infra/prod/docker validate
   cache: []
+
+build-docker-aggregator:
+  tags:
+    - docker
+  image: docker:23.0.6
+  services:
+    - docker:23.0.6-dind
+  stage: deploy
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY/r.oleynik/sksys/aggregator:latest
+    - docker push $CI_REGISTRY/r.oleynik/sksys/aggregator:latest
