@@ -2,15 +2,16 @@
 
 This directory contains the infrastructure deployments for this project:
 
-- [x] `gitlab-runner/` A Terraform deployment running a GitLab runner on Docker
 - [x] `modules/` Modules used for parts of the deployment
-
-  - [x] `grafana/` Terraform module to deploy Grafana to Docker
-  - [x] `influxdb/` Terraform module to deploy InfluxDB to Docker
-  - [x] `postgres/` Terraform module to deploy Postgres to Docker
-
-- [x] `dev/` Generic deployment to a local docker.
-- [ ] `prod/` Deployment to a Google Cloud hosted docker instance.
+  - [x] `gc-docker-instance` Deployment of Google Compute Instance with support for Docker
+  - [x] `docker-grafana/` Docker deployment of Grafana
+  - [x] `docker-influxdb/` Docker deployment of InfluxDB service
+  - [x] `docker-postgres/` Docker deployment of Postgres service
+  - [x] `docker-ingester/` Docker deployment of Ingester service
+  - [x] `docker-aggregator/` Docker deployment of aggregator services
+  - [x] `grafana-config/` Grafana Dashboards and Datasources
+- [x] `dev/` Deployment to local Docker instance
+- [x] `prod/` Deployment to Google Compute Instance
 
 ## Using Dev Environment
 
@@ -20,8 +21,9 @@ This directory contains the infrastructure deployments for this project:
 The dev environment contains of following components:
 
 - PostgreSQL running at `localhost:5432`,
-- InfluxDB running at `localhost:8086` and
-- Grafana running at `localhost:3000`
+- InfluxDB running at `localhost:8086`,
+- Grafana running at `localhost:3000` and
+- Admin running at `localhost:80`
 
 ### Configure
 
@@ -30,7 +32,7 @@ file inside `infra/dev` with following content:
 
 ```terraform
 # You can get a token from https://www.co2signal.com/;
-co2signal_token = "<redacted>"
+co2_token = "<redacted>"
 ```
 
 ### Deploy
@@ -54,18 +56,18 @@ service. You can access these passwords by running one of the following commands
 
 ```sh
 # Get PostgreSQL password
-terraform -chdir="infra/dev" output auth_postgres_password
+terraform -chdir="infra/dev" output postgres_password
 
 # Get InfluxDB root user password
-terraform -chdir="infra/dev" output timeseries_token
+terraform -chdir="infra/dev" output influxdb_password
 # Get InfluxDB root token
-terraform -chdir="infra/dev" output timeseries_password
+terraform -chdir="infra/dev" output influxdb_token
 ```
 
 In addition, the dev environment uses following login credentials:
 
-- PostgreSQL (auth): `db=auth`, `user=auth` and password see above
-- InfluxDB (timeseries): `user=root`, for password or access token see above
+- PostgreSQL: `db=postgres`, `user=root` and password see above
+- InfluxDB: `user=root`, for password or access token see above
 
 ### Destroy/Delete all Data
 
@@ -76,3 +78,26 @@ terraform -chdir=infra/dev destroy
 ```
 
 You have to confirm the destruction with `yes`.
+
+## Production Deployment
+
+Requirements:
+
+- `gcloud`
+- `docker`
+- `ssh`
+
+Run the following commands:
+
+```sh
+./infra/prod/run.sh init
+./infra/prod/run.sh apply
+```
+
+You may need to run the following command, in case the second stage fails:
+
+```sh
+gcloud compute ssh sksys@sksys-runtime --command "docker version"
+```
+
+Rerun `./infra/prod/run.sh apply`
