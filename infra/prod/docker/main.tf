@@ -24,6 +24,11 @@ provider "docker" {
 		"-o", "UserKnownHostsFile=/dev/null",
 		"-o", "StrictHostKeyChecking=no"
 	]
+	registry_auth {
+		address = "git.tu-berlin.de:5000"
+		username = var.registry_username
+		password = var.registry_password
+	}
 }
 
 provider "grafana" {

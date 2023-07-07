@@ -18,7 +18,7 @@ resource "docker_image" "aggregator" {
 
 
 resource "docker_container" "main" {
-	image = var.dev? docker_image.aggregator.0.image_id: "git.tu-berlin.de:5000/r.oleynik/sksys:aggregator"
+	image = var.dev? docker_image.aggregator.0.image_id: "git.tu-berlin.de:5000/r.oleynik/sksys/aggregator"
 	name = var.name
 	hostname = var.name
 

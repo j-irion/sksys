@@ -14,3 +14,15 @@ variable "co2_token" {
 	description = "Token for CO2 Signal API"
 	sensitive = true
 }
+
+variable "registry_username" {
+	type = string
+	description = "Username of GitLab registry"
+	sensitive = true
+}
+
+variable "registry_password" {
+	type = string
+	description = "Password of GitLab registry"
+	sensitive = true
+}

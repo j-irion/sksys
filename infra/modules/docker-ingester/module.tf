@@ -17,7 +17,7 @@ resource "docker_image" "ingester" {
 }
 
 resource "docker_container" "main" {
-	image = var.dev? docker_image.ingester.0.image_id: "git.tu-berlin.de:5000/r.oleynik/sksys:ingester"
+	image = var.dev? docker_image.ingester.0.image_id: "git.tu-berlin.de:5000/r.oleynik/sksys/ingester"
 	name = var.name
 	hostname = var.name
 
