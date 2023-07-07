@@ -33,12 +33,7 @@ resource "grafana_dashboard" "main" {
 				id = 1
 				title = "gCO2eq/kWh Länder"
 				type = "timeseries"
-				gridPos = {
-					x = 0
-					y = 0
-					w = 12
-					h = 8
-				}
+				gridPos = { x = 0, y = 0, w = 12, h = 8 }
 				datasource = {
 					type = grafana_data_source.data.type
 					uid = grafana_data_source.data.uid
@@ -69,12 +64,7 @@ resource "grafana_dashboard" "main" {
 				id = 3
 				title = "gCO2eq/kWh Clients"
 				type = "timeseries"
-				gridPos = {
-					x = 12
-					y = 0
-					w = 12
-					h = 8
-				}
+				gridPos = { x = 12, y = 0, w = 12, h = 8 }
 				datasource = {
 					type = grafana_data_source.data.type
 					uid = grafana_data_source.data.uid
@@ -103,14 +93,9 @@ resource "grafana_dashboard" "main" {
 			},
 			{
 				id = 2
-				title = "gCO2eq/kWh Clients"
-				type = "timeseries"
-				gridPos = {
-					x = 0
-					y = 8
-					w = 12
-					h = 8
-				}
+				title = "Aktuelles gCO2eq/kWh der Länder"
+				type = "piechart"
+				gridPos = { x = 0, y = 8, w = 12, h = 8 }
 				datasource = {
 					type = grafana_data_source.data.type
 					uid = grafana_data_source.data.uid
@@ -141,12 +126,7 @@ resource "grafana_dashboard" "main" {
 				id = 4
 				title = "Client"
 				type = "piechart"
-				gridPos = {
-					x = 12
-					y = 8
-					w = 12
-					h = 8
-				}
+				gridPos = { x = 12, y = 8, w = 12, h = 8 }
 				datasource = {
 					type = grafana_data_source.data.type
 					uid = grafana_data_source.data.uid
