@@ -132,5 +132,5 @@ build-docker-aggregator:
   stage: deploy
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $CI_REGISTRY/r.oleynik/sksys/aggregator:latest
+    - docker build -t $CI_REGISTRY/r.oleynik/sksys/aggregator:latest -f backend/aggregator/Dockerfile
     - docker push $CI_REGISTRY/r.oleynik/sksys/aggregator:latest
