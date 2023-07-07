@@ -28,3 +28,9 @@ variable "network_id" {
 	type = string
 	default = "default"
 }
+
+variable "dev" {
+	type = bool
+	description = "Build custom docker image"
+	default = false
+}

@@ -8,6 +8,7 @@ terraform {
 }
 
 resource "docker_image" "ingester" {
+	count = var.dev? 1: 0
 	name = var.name
 	build {
 		dockerfile = "${path.module}/../../../backend/ingester/Dockerfile"
@@ -16,7 +17,7 @@ resource "docker_image" "ingester" {
 }
 
 resource "docker_container" "main" {
-	image = docker_image.ingester.image_id
+	image = var.dev? docker_image.ingester.0.image_id: "git.tu-berlin.de:5000/r.oleynik/sksys:ingester"
 	name = var.name
 	hostname = var.name
 

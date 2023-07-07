@@ -8,6 +8,7 @@ terraform {
 }
 
 resource "docker_image" "aggregator" {
+	count = var.dev? 1: 0
 	name = "aggregator"
 	build {
 		dockerfile = "${path.module}/../../../backend/aggregator/Dockerfile"
@@ -17,7 +18,7 @@ resource "docker_image" "aggregator" {
 
 
 resource "docker_container" "main" {
-	image = docker_image.aggregator.image_id
+	image = var.dev? docker_image.aggregator.0.image_id: "git.tu-berlin.de:5000/r.oleynik/sksys:aggregator"
 	name = var.name
 	hostname = var.name
 

@@ -51,6 +51,8 @@ module "aggregator" {
 	influxdb_token = random_password.influxdb_token.result
 
 	network_id = docker_network.default.id
+
+	dev = true
 }
 
 module "ingester" {
@@ -63,4 +65,6 @@ module "ingester" {
 	port = 80
 
 	network_id = docker_network.default.id
+
+	dev = true
 }
