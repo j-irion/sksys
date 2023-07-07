@@ -1,8 +1,7 @@
 #!//usr/bin/env bash
 
-HOST="http://34.159.153.108"
-printf "Token: "
-read -r TOKEN
+HOST="$1"
+TOKEN="$2"
 
 set -xeo pipefail
 
@@ -13,4 +12,5 @@ while true; do
 		-H 'Content-Type: application/json' \
 		--data "{\"authtoken\":\"$TOKEN\",\"timestamp\":$(date "+%s"),\"used_power\":$VALUE}"
 	sleep 5
+	(( COUNTER+=1 ))
 done

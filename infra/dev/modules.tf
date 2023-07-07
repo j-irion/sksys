@@ -46,7 +46,7 @@ module "aggregator" {
 	source = "../modules/docker-aggregator"
 
 	name = "aggregator"
-	co2_token = ""
+	co2_token = var.co2_token
 	influxdb_url = module.influxdb.url
 	influxdb_token = random_password.influxdb_token.result
 	ingester_url = module.ingester.url

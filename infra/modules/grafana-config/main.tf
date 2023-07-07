@@ -62,7 +62,7 @@ resource "grafana_dashboard" "main" {
 			},
 			{
 				id = 3
-				title = "gCO2eq/kWh Clients"
+				title = "W per Clients"
 				type = "timeseries"
 				gridPos = { x = 12, y = 0, w = 12, h = 8 }
 				datasource = {
@@ -71,7 +71,7 @@ resource "grafana_dashboard" "main" {
 				}
 				fieldConfig = {
 					defaults = {
-						unit = "gCO2eq/kWh"
+						unit = "W"
 					}
 				}
 				targets = [
@@ -84,8 +84,8 @@ resource "grafana_dashboard" "main" {
 						query = <<EOQ
 						from(bucket: "${var.influxdb_bucket}")
 						|>range(start: -1d)
-						|>filter(fn: (r) => r["_measurement"] == "carbon_intensity")
-						|>filter(fn: (r) => r["id"] > "0")
+						|>filter(fn: (r) => r["_measurement"] == "power_usage")
+						|>filter(fn: (r) => r["machine_id"] > "0")
 						|>drop(columns: ["_field"])
 						EOQ
 					}
@@ -133,7 +133,7 @@ resource "grafana_dashboard" "main" {
 				}
 				fieldConfig = {
 					defaults = {
-						unit = "gCO2eq/kWh"
+						unit = "W"
 					}
 				}
 				targets = [
@@ -146,8 +146,8 @@ resource "grafana_dashboard" "main" {
 						query = <<EOQ
 						from(bucket: "${var.influxdb_bucket}")
 						|>range(start: -1d)
-						|>filter(fn: (r) => r["_measurement"] == "carbon_intensity")
-						|>filter(fn: (r) => r["id"] > "0")
+						|>filter(fn: (r) => r["_measurement"] == "power_usage")
+						|>filter(fn: (r) => r["machine_id"] > "0")
 						|>drop(columns: ["_field"])
 						EOQ
 					}
