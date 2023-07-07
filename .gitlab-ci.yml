@@ -134,3 +134,15 @@ build-docker-aggregator:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $CI_REGISTRY/r.oleynik/sksys/aggregator:latest -f backend/aggregator/Dockerfile .
     - docker push $CI_REGISTRY/r.oleynik/sksys/aggregator:latest
+
+build-docker-ingester:
+  tags:
+    - docker
+  image: docker:23.0.6
+  services:
+    - docker:23.0.6-dind
+  stage: deploy
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY/r.oleynik/sksys/ingester:latest -f backend/ingester/Dockerfile .
+    - docker push $CI_REGISTRY/r.oleynik/sksys/ingester:latest
