@@ -8,17 +8,19 @@ terraform {
 }
 
 resource "docker_image" "aggregator" {
-	count = var.dev? 1: 0
-	name = "aggregator"
-	build {
-		dockerfile = "${path.module}/../../../backend/aggregator/Dockerfile"
-		context = "${path.module}/../../.."
+	name = var.dev? "aggregator": "git.tu-berlin.de:5000/r.oleynik/sksys/aggregator"
+	dynamic "build" {
+		for_each = var.dev? [0]: []
+		content {
+			dockerfile = "${path.module}/../../../backend/aggregator/Dockerfile"
+			context = "${path.module}/../../.."
+		}
 	}
 }
 
 
 resource "docker_container" "main" {
-	image = var.dev? docker_image.aggregator.0.image_id: "git.tu-berlin.de:5000/r.oleynik/sksys/aggregator"
+	image = docker_image.aggregator.image_id
 	name = var.name
 	hostname = var.name
 
