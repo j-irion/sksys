@@ -20,6 +20,10 @@ variable "influxdb_token" {
 	sensitive = true
 }
 
+variable "ingester_url" {
+	type = string
+}
+
 variable "network_id" {
 	type = string
 	default = "default"

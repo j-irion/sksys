@@ -49,6 +49,7 @@ module "aggregator" {
 	co2_token = ""
 	influxdb_url = module.influxdb.url
 	influxdb_token = random_password.influxdb_token.result
+	ingester_url = module.ingester.url
 
 	network_id = docker_network.default.id
 

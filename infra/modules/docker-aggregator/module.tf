@@ -26,6 +26,7 @@ resource "docker_container" "main" {
 		"API_TOKEN=${var.co2_token}",
 		"INFLUXDB_URL=${var.influxdb_url}",
 		"INFLUXDB_TOKEN=${var.influxdb_token}",
+		"INGESTER_URL=${var.ingester_url}",
 		"RUST_LOG=debug"
 	]
 
