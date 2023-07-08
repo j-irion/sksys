@@ -8,6 +8,6 @@ export default defineConfig({
 
 module.exports = {
 	server: {
-	  base: '/client'
-	}
-  };
+		base: "/client",
+	},
+};
