@@ -17,10 +17,22 @@ terraform {
 
 provider "random" {}
 
-provider "docker" {}
+provider "docker" {
+	host = "ssh://sksys@${var.gce_instance_host}"
+	ssh_opts = [
+		"-i", var.gce_priv_key_file,
+		"-o", "UserKnownHostsFile=/dev/null",
+		"-o", "StrictHostKeyChecking=no"
+	]
+	registry_auth {
+		address = "git.tu-berlin.de:5000"
+		username = var.registry_username
+		password = var.registry_password
+	}
+}
 
 provider "grafana" {
-	url = "http://localhost:3000"
+	url = "http://${var.gce_instance_host}:3000"
 	auth = "anonymous"
 }
 

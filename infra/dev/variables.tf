@@ -1,4 +1,4 @@
-variable "co2signal_token" {
-	description = "API token from https://www.co2signal.com/"
-	sensitive = true
+variable "co2_token" {
+	type = string
+	description = "CO2 signal API token"
 }

@@ -15,6 +15,7 @@ stages:
   - format
   - build
   - lint
+  - deploy
 
 format-cargo-fmt:
   image: rust:$RUST_MSRV-alpine
@@ -108,8 +109,8 @@ validate-terraform 2/3:
   before_script:
     - apk add --no-cache terraform
   script:
-    - terraform -chdir=infra/gitlab-runner init
-    - terraform -chdir=infra/gitlab-runner validate
+    - terraform -chdir=infra/prod/gce init
+    - terraform -chdir=infra/prod/gce validate
   cache: []
 
 validate-terraform 3/3:
@@ -118,6 +119,34 @@ validate-terraform 3/3:
   before_script:
     - apk add --no-cache terraform
   script:
-    - terraform -chdir=infra/gce-compute init
-    - terraform -chdir=infra/gce-compute validate
+    - terraform -chdir=infra/prod/docker init
+    - terraform -chdir=infra/prod/docker validate
   cache: []
+
+build-docker-aggregator:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  tags:
+    - docker
+  image: docker:23.0.6
+  services:
+    - docker:23.0.6-dind
+  stage: deploy
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY/r.oleynik/sksys/aggregator:latest -f backend/aggregator/Dockerfile .
+    - docker push $CI_REGISTRY/r.oleynik/sksys/aggregator:latest
+
+build-docker-ingester:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  tags:
+    - docker
+  image: docker:23.0.6
+  services:
+    - docker:23.0.6-dind
+  stage: deploy
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY/r.oleynik/sksys/ingester:latest -f backend/ingester/Dockerfile .
+    - docker push $CI_REGISTRY/r.oleynik/sksys/ingester:latest
