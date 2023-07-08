@@ -8,16 +8,18 @@ terraform {
 }
 
 resource "docker_image" "ingester" {
-	count = var.dev? 1: 0
-	name = var.name
-	build {
-		dockerfile = "${path.module}/../../../backend/ingester/Dockerfile"
-		context = "${path.module}/../../.."
+	name = var.dev? "ingester": "git.tu-berlin.de:5000/r.oleynik/sksys/ingester"
+	dynamic "build" {
+		for_each = var.dev? [0]: []
+		content {
+			dockerfile = "${path.module}/../../../backend/ingester/Dockerfile"
+			context = "${path.module}/../../.."
+		}
 	}
 }
 
 resource "docker_container" "main" {
-	image = var.dev? docker_image.ingester.0.image_id: "git.tu-berlin.de:5000/r.oleynik/sksys/ingester"
+	image = docker_image.ingester.image_id
 	name = var.name
 	hostname = var.name
 
