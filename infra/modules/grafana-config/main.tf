@@ -27,7 +27,7 @@ resource "grafana_dashboard" "main" {
 	config_json = jsonencode({
 		title = "TODO"
 		editable = false
-		refresh = "1h"
+		refresh = "5s"
 		panels = [
 			{
 				id = 1
@@ -62,7 +62,7 @@ resource "grafana_dashboard" "main" {
 			},
 			{
 				id = 3
-				title = "W per Clients"
+				title = "Carboon-Footprint per Client"
 				type = "timeseries"
 				gridPos = { x = 12, y = 0, w = 12, h = 8 }
 				datasource = {
@@ -71,7 +71,7 @@ resource "grafana_dashboard" "main" {
 				}
 				fieldConfig = {
 					defaults = {
-						unit = "W"
+						unit = "gCO2eq/h"
 					}
 				}
 				targets = [
@@ -84,9 +84,11 @@ resource "grafana_dashboard" "main" {
 						query = <<EOQ
 						from(bucket: "${var.influxdb_bucket}")
 						|>range(start: -1d)
-						|>filter(fn: (r) => r["_measurement"] == "power_usage")
-						|>filter(fn: (r) => r["machine_id"] > "0")
-						|>drop(columns: ["_field"])
+						|>truncateTimeColumn(unit: 1h)
+						|>filter(fn: (r) => r["_measurement"] == "power_usage" or r["_measurement"] == "carbon_intensity")
+						|>pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
+						|>map(fn: (r) => ({r with Footprint: r["carbon_intensity"] * r["power_usage"]/1000.0 }))
+						|>drop(columns: ["cabon_intensity", "_start", "_stop", "power_usage"])
 						EOQ
 					}
 				]
