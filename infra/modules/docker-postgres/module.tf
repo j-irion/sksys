@@ -31,6 +31,9 @@ resource "docker_container" "main" {
 	networks_advanced {
 		name = var.network_id
 	}
+	log_opts = {
+		"tag" = "{{.Name}}"
+	}
 }
 
 resource "docker_volume" "pgdata" {

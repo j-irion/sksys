@@ -31,6 +31,9 @@ resource "docker_container" "main" {
 		container_path = "/etc/influxdb2"
 		volume_name = docker_volume.config.name
 	}
+	log_opts = {
+		"tag" = "{{.Name}}"
+	}
 	ports {
 		internal = 8086
 		external = var.port

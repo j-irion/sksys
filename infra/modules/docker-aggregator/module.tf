@@ -32,6 +32,10 @@ resource "docker_container" "main" {
 		"RUST_LOG=debug"
 	]
 
+	log_opts = {
+		"tag" = "{{.Name}}"
+	}
+
 	networks_advanced {
 		name = var.network_id
 	}
