@@ -25,15 +25,15 @@ resource "grafana_data_source" "data" {
 
 resource "grafana_dashboard" "main" {
 	config_json = jsonencode({
-		title = "TODO"
+		title = "Client Carbon Footprint"
 		editable = false
-		refresh = "1h"
+		refresh = "15s"
 		panels = [
 			{
 				id = 1
 				title = "gCO2eq/kWh Länder"
 				type = "timeseries"
-				gridPos = { x = 0, y = 0, w = 12, h = 8 }
+				gridPos = { x = 0, y = 0, w = 8, h = 12 }
 				datasource = {
 					type = grafana_data_source.data.type
 					uid = grafana_data_source.data.uid
@@ -42,6 +42,7 @@ resource "grafana_dashboard" "main" {
 					defaults = {
 						unit = "gCO2eq/kWh"
 					}
+					overrides = []
 				}
 				targets = [
 					{
@@ -52,7 +53,7 @@ resource "grafana_dashboard" "main" {
 						}
 						query = <<EOQ
 						from(bucket: "${var.influxdb_bucket}")
-						|>range(start: -1d)
+						|>range(start: v.timeRangeStart, stop: v.timeRangeStop)
 						|>filter(fn: (r) => r["_measurement"] == "carbon_intensity")
 						|>filter(fn: (r) => r["location"] > "0")
 						|>drop(columns: ["_field"])
@@ -62,16 +63,25 @@ resource "grafana_dashboard" "main" {
 			},
 			{
 				id = 3
-				title = "W per Clients"
+				title = "Client Carbon Footprint"
 				type = "timeseries"
-				gridPos = { x = 12, y = 0, w = 12, h = 8 }
+				gridPos = { x = 8, y = 0, w = 16, h = 12 }
 				datasource = {
 					type = grafana_data_source.data.type
 					uid = grafana_data_source.data.uid
 				}
 				fieldConfig = {
 					defaults = {
-						unit = "W"
+						unit = "gCO2eq/h"
+					}
+					overrides = []
+				}
+				options = {
+					legend = {
+						displayMode = "table",
+						placement = "right",
+						showLegend = true,
+						values = ["last"]
 					}
 				}
 				targets = [
@@ -82,11 +92,27 @@ resource "grafana_dashboard" "main" {
 							uid = grafana_data_source.data.uid
 						}
 						query = <<EOQ
-						from(bucket: "${var.influxdb_bucket}")
-						|>range(start: -1d)
-						|>filter(fn: (r) => r["_measurement"] == "power_usage")
-						|>filter(fn: (r) => r["machine_id"] > "0")
-						|>drop(columns: ["_field"])
+						import "join"
+
+						locations = from(bucket: "${var.influxdb_bucket}")
+							|>range(start: v.timeRangeStart, stop: v.timeRangeStop)
+							|>filter(fn: (r) => r["_measurement"] == "carbon_intensity")
+							|>aggregateWindow(every: 15s, fn: mean)
+							|>fill(usePrevious: true)
+							|>group(columns: ["location"])
+						clients = from(bucket: "${var.influxdb_bucket}")
+							|>range(start: v.timeRangeStart, stop: v.timeRangeStop)
+							|>filter(fn: (r) => r["_measurement"] == "power_usage")
+							|>aggregateWindow(every: 15s, fn: mean)
+							|>group(columns: ["location"])
+
+						join.left(
+							left: clients,
+							right: locations,
+							on: (l, r) => l.location == r.location and l._time == r._time,
+							as: (l, r) => ({l with _value: l._value * r._value / 1000.0})
+						)
+						|>group(columns:["machine_id"])
 						EOQ
 					}
 				]
@@ -104,6 +130,13 @@ resource "grafana_dashboard" "main" {
 					defaults = {
 						unit = "gCO2eq/kWh"
 					}
+					overrides = []
+				}
+				options = {
+					legend = {
+						placement = "right",
+						showLegend = true,
+					}
 				}
 				targets = [
 					{
@@ -114,7 +147,7 @@ resource "grafana_dashboard" "main" {
 						}
 						query = <<EOQ
 						from(bucket: "${var.influxdb_bucket}")
-						|>range(start: -1d)
+						|>range(start: v.timeRangeStart, stop: v.timeRangeStop)
 						|>filter(fn: (r) => r["_measurement"] == "carbon_intensity")
 						|>filter(fn: (r) => r["location"] > "0")
 						|>drop(columns: ["_field"])
@@ -134,6 +167,13 @@ resource "grafana_dashboard" "main" {
 				fieldConfig = {
 					defaults = {
 						unit = "W"
+					}
+					overrides = []
+				}
+				options = {
+					legend = {
+						placement = "right",
+						showLegend = true,
 					}
 				}
 				targets = [
