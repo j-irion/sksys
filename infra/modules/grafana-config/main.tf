@@ -63,7 +63,7 @@ resource "grafana_dashboard" "main" {
 			},
 			{
 				id = 3
-				title = "Client Carbon Footprint"
+				title = "Clients"
 				type = "timeseries"
 				gridPos = { x = 8, y = 0, w = 16, h = 12 }
 				datasource = {
@@ -113,6 +113,8 @@ resource "grafana_dashboard" "main" {
 							as: (l, r) => ({l with _value: l._value * r._value / 1000.0})
 						)
 						|>group(columns:["machine_id"])
+						|>fill(value: 0.0)
+						|>drop(columns: ["_start", "_stop"])
 						EOQ
 					}
 				]
