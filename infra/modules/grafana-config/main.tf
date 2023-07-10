@@ -27,13 +27,13 @@ resource "grafana_dashboard" "main" {
 	config_json = jsonencode({
 		title = "Client Carbon Footprint"
 		editable = false
-		refresh = "15s"
+		refresh = "30s"
 		panels = [
 			{
 				id = 1
 				title = "gCO2eq/kWh Länder"
 				type = "timeseries"
-				gridPos = { x = 0, y = 0, w = 8, h = 12 }
+				gridPos = { x = 0, y = 0, w = 8, h = 14 }
 				datasource = {
 					type = grafana_data_source.data.type
 					uid = grafana_data_source.data.uid
@@ -56,6 +56,8 @@ resource "grafana_dashboard" "main" {
 						|>range(start: v.timeRangeStart, stop: v.timeRangeStop)
 						|>filter(fn: (r) => r["_measurement"] == "carbon_intensity")
 						|>filter(fn: (r) => r["location"] > "0")
+						|>aggregateWindow(every: 15s, fn: mean)
+						|>fill(usePrevious: true)
 						|>drop(columns: ["_field"])
 						EOQ
 					}
@@ -63,9 +65,9 @@ resource "grafana_dashboard" "main" {
 			},
 			{
 				id = 3
-				title = "Clients"
+				title = "Client Carbon Footprint"
 				type = "timeseries"
-				gridPos = { x = 8, y = 0, w = 16, h = 12 }
+				gridPos = { x = 8, y = 0, w = 16, h = 14 }
 				datasource = {
 					type = grafana_data_source.data.type
 					uid = grafana_data_source.data.uid
@@ -79,8 +81,9 @@ resource "grafana_dashboard" "main" {
 				options = {
 					legend = {
 						displayMode = "table",
-						placement = "right",
+						placement = "bottom",
 						showLegend = true,
+						calcs = ["lastNotNull"],
 						values = ["last"]
 					}
 				}
@@ -112,7 +115,7 @@ resource "grafana_dashboard" "main" {
 							on: (l, r) => l.location == r.location and l._time == r._time,
 							as: (l, r) => ({l with _value: l._value * r._value / 1000.0})
 						)
-						|>group(columns:["machine_id"])
+						|>group(columns:["machine_id", "location"])
 						|>fill(value: 0.0)
 						|>drop(columns: ["_start", "_stop"])
 						EOQ
