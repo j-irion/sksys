@@ -105,7 +105,7 @@ resource "grafana_dashboard" "main" {
 						)
 						|>filter(fn: (r) => r["Footprint"] >= 0.0)
 						|>group(columns: ["machine_id", "location"])
-						|>drop(columns: ["_value"])
+						|>drop(columns: ["_value", "_start", "_stop"])
 						EOQ
 					}
 				]
