@@ -101,10 +101,11 @@ resource "grafana_dashboard" "main" {
 							left: clients,
 							right: locations,
 							on: (l, r) => l._time == r._time,
-							as: (l, r) => ({l with _value: l._value * r._value / 1000.0})
+							as: (l, r) => ({l with Footprint: l._value * r._value / 1000.0})
 						)
-						|>filter(fn: (r) => r["_value"] >= 0.0)
-						|>group(columns: ["machine_id"])
+						|>filter(fn: (r) => r["Footprint"] >= 0.0)
+						|>group(columns: ["machine_id", "location"])
+						|>drop(columns: ["_value"])
 						EOQ
 					}
 				]
