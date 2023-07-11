@@ -1,13 +1,11 @@
 <template>
 	<div id="app">
 		<NavBar @add-client="addClient"></NavBar>
-		<div class="container">
-			<ClientList
-				:clients="clients"
-				@delete-client="removeClient"
-				@edit-client="changeClient"
-			></ClientList>
-		</div>
+		<ClientList
+			:clients="clients"
+			@delete-client="removeClient"
+			@edit-client="changeClient"
+		></ClientList>
 	</div>
 	<div
 		class="modal fade"
@@ -128,4 +126,17 @@ export default {
 	},
 };
 </script>
-<style></style>
+<style>
+#app {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	flex-grow: 1;
+}
+</style>

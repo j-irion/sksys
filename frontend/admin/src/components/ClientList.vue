@@ -1,42 +1,57 @@
 <template>
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th scope="col">Name</th>
-				<th scope="col">Location</th>
-				<th scope="col">Description</th>
-				<th scope="col"></th>
-				<th scope="col"></th>
-			</tr>
-		</thead>
-		<tbody class="table-group-divider">
-			<tr v-for="client in clients">
-				<td>
-					<h5>{{ client.name }}</h5>
-				</td>
-				<td>{{ client.location }}</td>
-				<td>{{ client.description }}</td>
-				<td>
-					<button
-						class="btn btn-primary"
-						data-bs-toggle="modal"
-						data-bs-target="#editModal"
-						@click="clientBeingEdited = client"
-					>
-						Edit
-					</button>
-				</td>
-				<td>
-					<button
-						class="btn btn-danger ms-2"
-						@click="$emit('delete-client', client.id)"
-					>
-						Remove
-					</button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="container">
+		<div class="row">
+			<div class="col-4">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th scope="col">Name</th>
+							<th scope="col">Location</th>
+							<th scope="col">Description</th>
+							<th scope="col"></th>
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody class="table-group-divider">
+						<tr v-for="client in clients">
+							<td>
+								<h5>{{ client.name }}</h5>
+							</td>
+							<td>{{ client.location }}</td>
+							<td>{{ client.description }}</td>
+							<td>
+								<button
+									class="btn btn-primary"
+									@click="clientDashboardShownId = client.id"
+								></button>
+							</td>
+							<td>
+								<button
+									class="btn btn-primary"
+									data-bs-toggle="modal"
+									data-bs-target="#editModal"
+									@click="clientBeingEdited = client"
+								>
+									Edit
+								</button>
+							</td>
+							<td>
+								<button
+									class="btn btn-danger ms-2"
+									@click="$emit('delete-client', client.id)"
+								>
+									Remove
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-8">
+				<iframe :src="grafanaURL" frameborder="0"></iframe>
+			</div>
+		</div>
+	</div>
 
 	<div
 		class="modal fade"
@@ -125,6 +140,8 @@
 	</div>
 </template>
 <script>
+import { getGrafanaURL } from "../services/ClientService";
+
 export default {
 	emits: ["edit-client", "delete-client"],
 	props: {
@@ -141,7 +158,13 @@ export default {
 				description: "",
 				location: "",
 			},
+			clientDashboardShownId:
+				this.clients.length > 0 ? clients[0].id : null,
+			grafanaURL: "",
 		};
+	},
+	created() {
+		this.createGrafanaIFrame();
 	},
 	methods: {
 		clearModal() {
@@ -163,6 +186,36 @@ export default {
 			this.$emit("edit-client", this.clientBeingEdited);
 			this.clearModal();
 		},
+		async createGrafanaIFrame() {
+			const grafanaURL = await getGrafanaURL();
+			this.grafanaURL = `${grafanaURL}&panelId=${this.clientDashboardShownId}`;
+		},
 	},
 };
 </script>
+<style scoped>
+.container {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	margin: 0;
+	max-width: none;
+}
+.row {
+	flex-grow: 1;
+}
+
+.col-4 {
+	overflow-y: scroll;
+}
+.col-8 {
+	display: flex;
+	flex-direction: column;
+}
+
+iframe {
+	flex-grow: 1;
+	width: 100%;
+	height: 100%;
+}
+</style>
