@@ -26,7 +26,7 @@ resource "grafana_data_source" "data" {
 resource "grafana_dashboard" "main" {
 	config_json = jsonencode({
 		title = "Client Carbon Footprint"
-		editable = false
+		editable = true
 		refresh = "30s"
 		panels = [
 			{
@@ -154,15 +154,15 @@ resource "grafana_dashboard" "main" {
 						from(bucket: "${var.influxdb_bucket}")
 						|>range(start: v.timeRangeStart, stop: v.timeRangeStop)
 						|>filter(fn: (r) => r["_measurement"] == "carbon_intensity")
-						|>filter(fn: (r) => r["location"] > "0")
-						|>drop(columns: ["_field"])
+						|>filter(fn: (r) => exists r["location"])
+						|>last()
 						EOQ
 					}
 				]
 			},
 			{
 				id = 4
-				title = "Client"
+				title = "Client Power Consumption"
 				type = "piechart"
 				gridPos = { x = 12, y = 8, w = 12, h = 8 }
 				datasource = {
@@ -192,8 +192,8 @@ resource "grafana_dashboard" "main" {
 						from(bucket: "${var.influxdb_bucket}")
 						|>range(start: -1d)
 						|>filter(fn: (r) => r["_measurement"] == "power_usage")
-						|>filter(fn: (r) => r["machine_id"] > "0")
-						|>drop(columns: ["_field"])
+						|>filter(fn: (r) => exists r["machine_id"])
+						|>last()
 						EOQ
 					}
 				]
