@@ -1,4 +1,4 @@
-// const HOST = "http://localhost:8000";
+// const HOST = "http://localhost";
 const HOST = "";
 
 export async function getAllClients() {
@@ -27,4 +27,9 @@ export async function deleteClient(id) {
 	await fetch(`${HOST}/api/admin/devices/${id}`, {
 		method: "DELETE",
 	});
+}
+
+export async function getGrafanaURL() {
+	const response = await fetch(`${HOST}/api/dashboard`);
+	return await response.text();
 }
