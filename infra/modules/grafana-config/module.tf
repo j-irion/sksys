@@ -26,7 +26,7 @@ resource "grafana_data_source" "data" {
 resource "grafana_dashboard" "main" {
 	config_json = jsonencode({
 		title = "Client Carbon Footprint"
-		editable = true
+		editable = false
 		refresh = "30s"
 		panels = [
 			{
