@@ -220,6 +220,18 @@
 					}
 				}
 			}
+		},
+		"/dashboard": {
+			"get": {
+				"produces": ["plain/text"],
+				"summary": [
+					"Returns base URL of Grafana Dashboard. Append with `&panelId=<id>` to select Panel"
+				],
+				"operationId": "grafanaBaseURL",
+				"responses": {
+					"200": {}
+				}
+			}
 		}
 	},
 	"definitions": {

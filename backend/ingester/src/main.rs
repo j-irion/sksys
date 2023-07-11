@@ -58,6 +58,7 @@ struct EnvConfig {
     #[serde(default = "default_query")]
     influxdb_query: String,
     influxdb_token: String,
+    grafana_base_url: String,
     database_url: String,
     serve_dir: std::path::PathBuf,
     bind_addr: SocketAddr,
@@ -108,7 +109,8 @@ async fn main() {
                     get(get_device).post(update_device).delete(delete_device),
                 )
                 .route("/locations", get(get_locations))
-                .route("/submit", post(submit_data)),
+                .route("/submit", post(submit_data))
+                .route("/dashboard", get(dashboard)),
         )
         .nest_service(
             "/client",
@@ -248,6 +250,10 @@ async fn get_locations(
         .fetch_all(&state.db_pool)
         .await?;
     Ok(Json(locs))
+}
+
+async fn dashboard(State(state): State<Arc<AppState>>) -> String {
+    state.config.grafana_base_url.clone()
 }
 
 #[derive(Deserialize, Debug)]

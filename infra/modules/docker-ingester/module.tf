@@ -28,6 +28,7 @@ resource "docker_container" "main" {
 		"INFLUXDB_TOKEN=${var.influxdb_token}",
 		"DATABASE_URL=${var.postgres_url}",
 		"BIND_ADDR=0.0.0.0:${var.port}",
+		"GRAFANA_BASE_URL=${var.grafana_base_url}",
 		"SERVE_DIR=/dist",
 		"RUST_LOG=debug"
 	]

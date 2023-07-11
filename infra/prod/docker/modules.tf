@@ -63,6 +63,7 @@ module "ingester" {
 	influxdb_url = module.influxdb.url
 	influxdb_token = random_password.influxdb_token.result
 	postgres_url = module.postgres.url
+	grafana_base_url = "http://${var.gce_instance_host}:3000/d-solo/${module.grafana-config.path}?orgId=1&refresh=30s"
 	port = 80
 
 	network_id = docker_network.default.id

@@ -34,3 +34,7 @@ variable "dev" {
 	description = "Build custom docker image"
 	default = false
 }
+
+variable "grafana_base_url" {
+	type = string
+}
