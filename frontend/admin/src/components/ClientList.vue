@@ -48,7 +48,18 @@
 				</table>
 			</div>
 			<div class="col-8">
-				<iframe :src="grafanaURL" frameborder="0"></iframe>
+				<div class="row">
+					<iframe
+						:src="`${grafanaURL}&panelId=3`"
+						frameborder="0"
+					></iframe>
+				</div>
+				<div class="row">
+					<iframe
+						:src="`${grafanaURL}&panelId=1`"
+						frameborder="0"
+					></iframe>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -186,9 +197,9 @@ export default {
 			this.$emit("edit-client", this.clientBeingEdited);
 			this.clearModal();
 		},
-		async createGrafanaIFrame() {
+		async createGrafanaIFrame(id) {
 			const grafanaURL = await getGrafanaURL();
-			this.grafanaURL = `${grafanaURL}&panelId=${this.clientDashboardShownId}`;
+			this.grafanaURL = `${grafanaURL}`;
 		},
 	},
 };

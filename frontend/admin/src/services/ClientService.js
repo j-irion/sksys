@@ -1,5 +1,5 @@
-const HOST = "http://localhost";
-//const HOST = "";
+// const HOST = "http://localhost";
+const HOST = "";
 
 export async function getAllClients() {
 	const response = await fetch(`${HOST}/api/admin/devices`);
@@ -31,6 +31,5 @@ export async function deleteClient(id) {
 
 export async function getGrafanaURL() {
 	const response = await fetch(`${HOST}/api/dashboard`);
-	return "http://localhost:3000/d-solo/ea7813f5-6ffa-4fe0-9e73-bde50dd9abfd/client-carbon-footprint?orgId=1&refresh=30s%";
-	//return await response.json();
+	return await response.text();
 }
