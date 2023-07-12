@@ -107,6 +107,7 @@
 								class="form-control"
 								v-model="clientBeingEdited.location"
 								required
+								readonly
 							/>
 						</div>
 						<div class="mb-3">
