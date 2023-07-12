@@ -22,12 +22,6 @@
 							<td>
 								<button
 									class="btn btn-primary"
-									@click="clientDashboardShownId = client.id"
-								></button>
-							</td>
-							<td>
-								<button
-									class="btn btn-primary"
 									data-bs-toggle="modal"
 									data-bs-target="#editModal"
 									@click="clientBeingEdited = client"
