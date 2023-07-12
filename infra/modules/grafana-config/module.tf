@@ -52,8 +52,10 @@ resource "grafana_dashboard" "main" {
 							uid = grafana_data_source.data.uid
 						}
 						query = <<EOQ
+						import "date"
+
 						from(bucket: "${var.influxdb_bucket}")
-						|>range(start: v.timeRangeStart, stop: v.timeRangeStop)
+						|>range(start: date.add(to: v.timeRangeStart, d: -1h), stop: v.timeRangeStop)
 						|>filter(fn: (r) => r["_measurement"] == "carbon_intensity")
 						|>filter(fn: (r) => r["location"] > "0")
 						|>aggregateWindow(every: 15s, fn: mean)
@@ -96,9 +98,10 @@ resource "grafana_dashboard" "main" {
 						}
 						query = <<EOQ
 						import "join"
+						import "date"
 
 						locations = from(bucket: "${var.influxdb_bucket}")
-							|>range(start: v.timeRangeStart, stop: v.timeRangeStop)
+							|>range(start: date.add(to: v.timeRangeStart, d: -1h), stop: v.timeRangeStop)
 							|>filter(fn: (r) => r["_measurement"] == "carbon_intensity")
 							|>aggregateWindow(every: 15s, fn: mean)
 							|>fill(usePrevious: true)
