@@ -5,6 +5,7 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
+							<th scope="col">ID</th>
 							<th scope="col">Name</th>
 							<th scope="col">Location</th>
 							<th scope="col">Description</th>
@@ -14,6 +15,7 @@
 					</thead>
 					<tbody class="table-group-divider">
 						<tr v-for="client in clients">
+							<td>{{ client.id }}</td>
 							<td>
 								<h5>{{ client.name }}</h5>
 							</td>
