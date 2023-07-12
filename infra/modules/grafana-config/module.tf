@@ -26,12 +26,12 @@ resource "grafana_data_source" "data" {
 resource "grafana_dashboard" "main" {
 	config_json = jsonencode({
 		title = "Client Carbon Footprint"
-		editable = false
+		editable = true
 		refresh = "30s"
 		panels = [
 			{
 				id = 1
-				title = "gCO2eq/kWh Länder"
+				title = "gCO2eq/kWh Countries"
 				type = "timeseries"
 				gridPos = { x = 0, y = 0, w = 8, h = 14 }
 				datasource = {
@@ -85,7 +85,7 @@ resource "grafana_dashboard" "main" {
 						displayMode = "table",
 						placement = "bottom",
 						showLegend = true,
-						calcs = ["lastNotNull"],
+						calcs = ["lastNotNull", "mean"],
 						values = ["last"]
 					}
 				}
@@ -127,7 +127,7 @@ resource "grafana_dashboard" "main" {
 			},
 			{
 				id = 2
-				title = "Aktuelles gCO2eq/kWh der Länder"
+				title = "Current Country gCO2eq/kWh"
 				type = "piechart"
 				gridPos = { x = 0, y = 8, w = 12, h = 8 }
 				datasource = {
