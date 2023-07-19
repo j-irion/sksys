@@ -37,6 +37,13 @@ co2_token = "<redacted>"
 
 ### Deploy
 
+> **Note:** Create a `infra/dev/terraform.tfvars` file to prevent persistently store the CO2signal
+> API key.
+>
+> ```terraform
+> co2_token = "<CO2 Signal>"
+> ```
+
 These services can be easily deployed using Terraform by running:
 
 ```sh
@@ -86,15 +93,42 @@ Requirements:
 - `gcloud`
 - `docker`
 - `ssh`
+- `terraform`
 
-Run the following commands:
+The production deployment consists of two stages:
+
+1. Deploying a compute instance to Google Cloud Platform and
+2. deploying docker container to the created VM.
+
+Before we can start our deployment, we need to configure our stages.
+
+```terraform
+# infra/prod/gce/terraform.tfvars
+gce_project_id = "<Google Cloud Project Id>"
+```
+
+In addition, we need to configure the second stage:
+
+```terraform
+# infra/prod/docker/terraform.tfvars
+gce_priv_key_file = "~/.ssh/google_compute_engine"
+co2_token = "<CO2 Signal Token>" # Get at https://www.co2signal.com/
+registry_username = "<TU-GitLab Username>"
+registry_password = "<TU-GitLab Registry Password>"
+```
+
+> **Note:** This projects uses GitLab's internal container registry hosted by TU.
+> To access the stored containers, it is necessary to have read access (e.g. as Guest).
+
+Our deployment Run the following commands:
 
 ```sh
 ./infra/prod/run.sh init
 ./infra/prod/run.sh apply
 ```
 
-You may need to run the following command, in case the second stage fails:
+You may need to run the following command to create an SSH key, in case the second deployment stage
+fails:
 
 ```sh
 gcloud compute ssh sksys@sksys-runtime --command "docker version"

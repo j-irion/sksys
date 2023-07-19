@@ -1,10 +1,4 @@
-# sksys
-
-<!--
-TODO:
-- Project Name
-- Project Description
--->
+# Green Log
 
 ## Required Tools
 
@@ -18,10 +12,10 @@ Development Tools:
 
 ## Usage
 
-<!--
-TODO:
-- How to build and deploy our project?
--->
+This application can be deployed in two ways:
+
+1. Deploy to a local Docker Engine, using the [Dev Environment](./infra#using-dev-environment)
+2. Deploy to Google Cloud, using the [Production Deployment](./infra#production-deployment)
 
 ## Contributing
 
