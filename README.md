@@ -19,7 +19,7 @@ This application can be deployed in two ways:
 1. Deploy to a local Docker Engine, using the [Dev Environment](./infra#using-dev-environment)
 2. Deploy to Google Cloud, using the [Production Deployment](./infra#production-deployment)
 
-A running instance can be found under: https://34.159.153.108
+A running instance can be found under: http://34.159.153.108
 
 ## Project Structure
 
